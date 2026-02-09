@@ -1,0 +1,396 @@
+{
+  "total_questions": 13,
+  "avg_faithfulness": 0.9076923076923078,
+  "avg_relevance": 1.0,
+  "avg_completeness": 0.9538461538461539,
+  "avg_keyword_coverage": 0.8533882783882784,
+  "avg_semantic_similarity": 0.7247759717184524,
+  "avg_subject_match": 0.4153846153846154,
+  "avg_keyword_hit": 0.7014652014652014,
+  "avg_latency": 11.616153846153846,
+  "overall_score": 0.8419,
+  "timestamp": "2026-02-09T22:19:42",
+  "results": [
+    {
+      "question": "Quelle est la complexite temporelle du tri par fusion (merge sort) ?",
+      "expected_answer": "O(n log n) dans tous les cas (meilleur, moyen, pire).",
+      "generated_answer": "### Complexité temporelle du tri par fusion (Merge Sort)\n\nLe tri par fusion, ou merge sort, est un algorithme de tri basé sur la méthode de \"diviser pour régner\". Voici les points clés concernant sa complexité temporelle :\n\n1. **Diviser** : L'algorithme divise le tableau en deux moitiés jusqu'à ce que chaque sous-tableau contienne un seul élément. Cette étape de division prend un temps constant, mais elle est répétée log(n) fois, où n est le nombre d'éléments dans le tableau.\n\n2. **Conquérir** : Ensuite, il fusionne les sous-tableaux triés pour produire un tableau trié. La fusion de deux sous-tableaux prend un temps linéaire, soit O(n), car chaque élément doit être comparé et placé dans le tableau final.\n\n3. **Combinaison des étapes** : En combinant ces deux étapes, on obtient la complexité temporelle totale :\n   - La division prend O(log n) (car on divise le tableau en deux à chaque étape).\n   - La fusion prend O(n) à chaque niveau de la division.\n\n### Conclusion\n\nAinsi, la complexité temporelle du tri par fusion est :\n- **O(n log n)** dans le meilleur, le moyen et le pire des cas.\n\nCette complexité est optimale pour les algorithmes de tri par comparaison, ce qui fait du tri par fusion un choix efficace pour trier de grandes quantités de données.\n\n**Source** : [Algorithmique -- TD -- td_corrige-15-21-correctionTD2.pdf] (Tris et tas)",
+      "subject": "Algorithmique",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 1.0,
+        "keyword_hit_ratio": 0.5,
+        "avg_doc_length": 1444.4,
+        "unique_sources": 5
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 0.875,
+        "semantic_similarity": 0.4233532986709443,
+        "answer_length": 1355
+      },
+      "latency_seconds": 8.39,
+      "retrieved_sources": [
+        "M1_Algo_2025-1-285-CM.pdf",
+        "td_corrige-15-21-correctionTD2.pdf",
+        "td_corrige-23-27-correctionTD3.pdf",
+        "M1_Algo_2026-43-94-CM2.pdf",
+        "M1_Algo_2026-1-42-CM1.pdf"
+      ]
+    },
+    {
+      "question": "Qu'est-ce qu'un algorithme glouton et donner un exemple ?",
+      "expected_answer": "Un algorithme glouton fait a chaque etape le choix localement optimal. Exemple : algorithme de Kruskal pour l'arbre couvrant minimum.",
+      "generated_answer": "### Définition d'un algorithme glouton\n\nUn **algorithme glouton** (ou greedy algorithm) est une méthode de résolution de problèmes qui construit une solution étape par étape, en choisissant à chaque étape l'option qui semble la meilleure à ce moment-là, sans tenir compte des conséquences futures. L'idée principale est de faire un choix localement optimal dans l'espoir que ces choix mèneront à une solution globale optimale.\n\n#### Caractéristiques des algorithmes gloutons :\n- **Choix local** : À chaque étape, l'algorithme fait le choix qui lui semble le meilleur sans considérer l'ensemble du problème.\n- **Simplicité** : Ils sont souvent plus simples à mettre en œuvre que d'autres méthodes comme la programmation dynamique.\n- **Non optimalité garantie** : Les algorithmes gloutons ne garantissent pas toujours une solution optimale pour tous les problèmes, mais ils peuvent être efficaces pour certains types de problèmes.\n\n### Exemple d'algorithme glouton : Le problème du sac à dos\n\nUn exemple classique d'algorithme glouton est le **problème du sac à dos** (ou \"knapsack problem\"). Dans ce problème, on a un sac qui peut contenir un poids maximum \\( W \\) et une série d'objets, chacun ayant un poids \\( w_i \\) et une valeur \\( v_i \\). L'objectif est de maximiser la valeur totale des objets dans le sac sans dépasser le poids maximum.\n\n#### Algorithme glouton pour le problème du sac à dos :\n1. **Trier les objets** : On commence par trier les objets par ordre décroissant de leur valeur (ou de leur rapport valeur/poids).\n2. **Sélectionner les objets** : On parcourt les objets triés et on les ajoute au sac tant que le poids total ne dépasse pas \\( W \\).\n\nVoici un pseudo-code simplifié :\n\n```pseudo\ntrier les objets par valeur décroissante\nw = 0  // poids total dans le sac\npour chaque objet i dans la liste triée :\n    si w_i + w ≤ W alors\n        ajouter l'objet i au sac\n        w = w + w_i\n    sinon\n        ignorer l'objet i\nfin pour\n```\n\n### Conclusion\n\nLes algorithmes gloutons sont utiles pour résoudre certains problèmes d'optimisation, mais il est important de vérifier si le problème en question peut être résolu de manière optimale avec cette approche. Par exemple, pour le problème du sac à dos, l'algorithme glouton peut ne pas donner la solution optimale dans tous les cas, mais il est simple et efficace pour des cas spécifiques. \n\n(Source : [Algorithmique -- CM -- M1_Algo_2025-1-285-CM.pdf], section sur les algorithmes gloutons)",
+      "subject": "Algorithmique",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 0.5,
+        "keyword_hit_ratio": 0.9,
+        "avg_doc_length": 1561.5,
+        "unique_sources": 7
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 0.7,
+        "keyword_coverage": 0.5,
+        "semantic_similarity": 0.6795281803082762,
+        "answer_length": 2459
+      },
+      "latency_seconds": 13.5,
+      "retrieved_sources": [
+        "M1_Algo_2025-1-285-CM.pdf",
+        "td.pdf",
+        "CM1-2.pdf",
+        "TD000 (3).pdf",
+        "examen_algo_janvier_2020.pdf",
+        "Supervised Learning-Part 1.pdf",
+        "M1_Algo_2026-1-42-CM1.pdf"
+      ]
+    },
+    {
+      "question": "Quelle est la difference entre l'apprentissage supervise et non supervise ?",
+      "expected_answer": "L'apprentissage supervise utilise des donnees etiquetees pour entrainer le modele, tandis que le non supervise decouvre des structures dans des donnees non etiquetees.",
+      "generated_answer": "## Différences entre l'apprentissage supervisé et non supervisé\n\nL'apprentissage supervisé et non supervisé sont deux approches fondamentales de l'apprentissage automatique. Voici les principales différences entre ces deux types d'apprentissage :\n\n### 1. Nature des données\n\n- **Apprentissage Supervisé** :\n  - Utilise des **données étiquetées**. Cela signifie que chaque exemple d'entraînement est associé à une sortie spécifique (classe ou valeur continue).\n  - Exemple : Dans un problème de classification d'emails, chaque email est étiqueté comme \"spam\" ou \"non spam\".\n\n- **Apprentissage Non Supervisé** :\n  - Utilise des **données non étiquetées**. Il n'y a pas de sortie associée aux exemples d'entraînement.\n  - Exemple : Dans un problème de clustering, l'algorithme doit découvrir des groupes ou des structures dans les données sans aucune étiquette.\n\n### 2. Objectif\n\n- **Apprentissage Supervisé** :\n  - L'objectif est de **prédire une sortie spécifique** à partir des données d'entrée. Cela peut inclure des tâches de classification (assigner une classe) ou de régression (prédire une valeur continue).\n  - Exemple : Prédire le prix d'une maison en fonction de ses caractéristiques (surface, nombre de chambres, etc.).\n\n- **Apprentissage Non Supervisé** :\n  - L'objectif est de **découvrir des patterns ou des structures** dans les données. Cela peut inclure des tâches comme le clustering (regroupement) ou la réduction de dimensionnalité.\n  - Exemple : Regrouper des clients en fonction de leurs comportements d'achat sans connaître à l'avance les groupes.\n\n### 3. Méthodes et Algorithmes\n\n- **Apprentissage Supervisé** :\n  - Utilise des algorithmes comme la régression linéaire, les arbres de décision, K-Nearest Neighbors (KNN), etc. (source : [Intelligence Artificielle -- Document -- Supervised Learning-Part 1.pdf]).\n\n- **Apprentissage Non Supervisé** :\n  - Utilise des algorithmes comme le clustering (K-means, DBSCAN), la réduction de dimensionnalité (PCA), etc. (source : [Intelligence Artificielle -- CM -- CM1-2.pdf]).\n\n### Conclusion\n\nEn résumé, la principale différence réside dans la présence ou l'absence d'étiquettes dans les données d'entraînement et dans les objectifs que chaque type d'apprentissage cherche à atteindre. L'apprentissage supervisé se concentre sur la prédiction de sorties spécifiques, tandis que l'apprentissage non supervisé vise à explorer et à découvrir des structures cachées dans les données.",
+      "subject": "Intelligence Artificielle",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 1.0,
+        "keyword_hit_ratio": 0.8333333333333334,
+        "avg_doc_length": 484.5,
+        "unique_sources": 3
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 0.8333333333333334,
+        "semantic_similarity": 0.6642647669968658,
+        "answer_length": 2444
+      },
+      "latency_seconds": 11.08,
+      "retrieved_sources": [
+        "CM1-2.pdf",
+        "Supervised Learning-Part 2.pdf",
+        "Supervised Learning-Part 1.pdf"
+      ]
+    },
+    {
+      "question": "Qu'est-ce que la descente de gradient ?",
+      "expected_answer": "La descente de gradient est un algorithme d'optimisation qui ajuste iterativement les parametres d'un modele en suivant le gradient negatif de la fonction de cout.",
+      "generated_answer": "## Qu'est-ce que la Descente de Gradient ?\n\nLa descente de gradient est un **algorithme d'optimisation** utilisé principalement dans le domaine de l'apprentissage automatique et de l'intelligence artificielle. Son objectif principal est de **minimiser une fonction**, souvent appelée fonction de coût ou fonction de perte, qui évalue la performance d'un modèle.\n\n### Principe de la Descente de Gradient\n\n- **Direction de la Pente** : La méthode se déplace itérativement dans la direction de la pente la plus raide de la fonction de coût. Cela signifie qu'à chaque étape, elle ajuste les paramètres du modèle pour réduire la valeur de la fonction de coût.\n- **Fonction Convexe** : La descente de gradient est particulièrement efficace pour les fonctions convexes, où il est garanti qu'il existe un minimum global.\n\n### Formule de Mise à Jour\n\nLa mise à jour des paramètres se fait selon la formule suivante :\n\n\\[\n\\theta := \\theta - \\alpha \\nabla J(\\theta)\n\\]\n\noù :\n- \\(\\theta\\) représente les paramètres du modèle,\n- \\(\\alpha\\) est le **taux d'apprentissage**, qui détermine la taille des pas effectués lors de la mise à jour,\n- \\(\\nabla J(\\theta)\\) est le **gradient** de la fonction de coût, qui indique la direction et la vitesse du changement.\n\n### Application dans la Régression Logistique\n\nDans le contexte de la régression logistique, l'algorithme de descente de gradient suit les étapes suivantes :\n\n1. **Initialisation** : Les paramètres \\(\\theta\\) sont initialisés aléatoirement.\n2. **Calcul des Prédictions** : On utilise la fonction sigmoïde pour obtenir les prédictions.\n3. **Calcul du Gradient** : On évalue le gradient de la fonction de coût.\n4. **Mise à Jour des Paramètres** : On met à jour les paramètres en utilisant la formule de mise à jour.\n\nCette méthode est essentielle pour entraîner des modèles de machine learning, car elle permet d'optimiser les paramètres afin d'améliorer la précision des prédictions.\n\n### Conclusion\n\nLa descente de gradient est un outil fondamental en apprentissage supervisé, permettant d'ajuster les modèles pour qu'ils s'adaptent au mieux aux données d'entraînement. Sa compréhension est cruciale pour tout étudiant en informatique, notamment dans le cadre de l'apprentissage supervisé.\n\n**Source** : [Intelligence Artificielle -- Document -- Supervised Learning-Part 1.pdf]",
+      "subject": "Intelligence Artificielle",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 0.9,
+        "keyword_hit_ratio": 0.8,
+        "avg_doc_length": 1010.2,
+        "unique_sources": 6
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 0.9,
+        "semantic_similarity": 0.7928714190447659,
+        "answer_length": 2325
+      },
+      "latency_seconds": 10.81,
+      "retrieved_sources": [
+        "M1_Algo_2025-1-285-CM.pdf",
+        "td.pdf",
+        "CM1-2.pdf",
+        "TD000 (3).pdf",
+        "Supervised Learning-Part 1.pdf",
+        "Supervised Learning-Part 2.pdf"
+      ]
+    },
+    {
+      "question": "Qu'est-ce que l'unification en Prolog ?",
+      "expected_answer": "L'unification est le mecanisme par lequel Prolog tente de rendre deux termes identiques en trouvant une substitution de variables appropriee.",
+      "generated_answer": "### Qu'est-ce que l'unification en Prolog ?\n\nL'unification est un concept fondamental en Prolog qui permet de rendre deux formules identiques en assignant des valeurs aux variables qu'elles contiennent. Voici une explication détaillée :\n\n#### Définition de l'unification\n- **Procédé d'unification** : C'est une tentative d'instancier deux expressions afin de les rendre égales. En d'autres termes, l'unification cherche à trouver des substitutions pour les variables présentes dans les formules afin qu'elles correspondent exactement.\n\n#### Fonctionnement de l'unification\n- **Unification réussie** : Si l'unification réussit dans la tête d'une règle, cette réussite se propage aux prémisses de la règle. Par exemple :\n  - `pere(Y,Z)` s’unifie avec `pere(X,jean)` si on effectue les substitutions suivantes : `X = Y` et `Z = jean`.\n  - `aime(leo,X)` s’unifie avec `aime(Y,mere_de(Y))` si on effectue les substitutions : `X = mere_de(leo)` et `Y = leo`.\n\n- **Variables anonymes** : Prolog permet également l'utilisation de variables anonymes, notées par `_`. Par exemple :\n  - Pour savoir si quelqu'un habite à Lyon, on peut écrire `habite(_,lyon)`, qui s’unifie avec `habite(jane,lyon)`.\n\n#### Exemples d'unification\n- **Exemple 1** : \n  - `habite(X,Y)` s’unifie avec `habite(john,paris)` si `X = john` et `Y = paris`.\n  \n- **Exemple 2** :\n  - `habite(_,_)` s’unifie avec tous les faits de la forme `habite(A,B)` car les variables anonymes peuvent prendre n'importe quelle valeur.\n\n- **Non équivalence** :\n  - `habite(X,X)` ne s'unifie pas avec `habite(joe,marseille)` car cela impliquerait que `joe` habite `marseille` et que `marseille` est égal à `joe`, ce qui n'est pas le cas.\n\n### Conclusion\nL'unification est donc un mécanisme clé qui permet à Prolog de résoudre des requêtes en cherchant à établir des correspondances entre les faits et les règles définis dans la base de connaissances. Cela permet à Prolog d'explorer les différentes possibilités pour répondre à une question posée par l'utilisateur.\n\n**Source** : [Logique & Prolog -- CM -- CM_prolog.pdf]",
+      "subject": "Logique & Prolog",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 1.0,
+        "keyword_hit_ratio": 1.0,
+        "avg_doc_length": 830.1,
+        "unique_sources": 2
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 1.0,
+        "semantic_similarity": 0.7941596153205279,
+        "answer_length": 2065
+      },
+      "latency_seconds": 15.99,
+      "retrieved_sources": [
+        "CM_LD2_Raisonnement_Slides.pdf",
+        "CM_prolog.pdf"
+      ]
+    },
+    {
+      "question": "Expliquer le principe de resolution en logique des predicats.",
+      "expected_answer": "La resolution est une regle d'inference qui, a partir de deux clauses contenant des litteraux complementaires, derive une nouvelle clause (resolvante). C'est la base du moteur d'inference de Prolog.",
+      "generated_answer": "# Principe de Résolution en Logique des Prédicats\n\nLa résolution est une méthode fondamentale utilisée en logique des prédicats pour prouver des formules ou des théorèmes. Voici une explication structurée de ce principe :\n\n## 1. Définition de la Résolution\n\nLa résolution est un mécanisme qui permet de déduire de nouvelles informations à partir d'un ensemble de clauses. Elle repose sur le principe de contradiction : si l'on peut prouver qu'une proposition est fausse, alors sa négation est vraie.\n\n## 2. Clauses de Horn\n\nEn logique des prédicats, les formules sont souvent exprimées sous forme de **clauses**. Une clause de Horn est une disjonction de littéraux (prédicats ou leurs négations) qui contient au plus un littéral positif. Par exemple, la clause suivante est une clause de Horn :\n\n- ¬P ∨ ¬Q ∨ R\n\nCette clause peut être interprétée comme \"si P et Q sont vrais, alors R doit être vrai\".\n\n## 3. Processus de Résolution\n\nLe processus de résolution se déroule en plusieurs étapes :\n\n### a. Négation de l'énoncé à prouver\n\nPour prouver une formule \\( A \\), on commence par supposer que \\( A \\) est faux, c'est-à-dire que l'on considère la négation \\( ¬A \\).\n\n### b. Unification\n\nOn cherche à unifier \\( ¬A \\) avec les clauses de l'ensemble de connaissances. L'unification consiste à substituer des variables dans les clauses pour les rendre compatibles.\n\n### c. Application de la Règle de Résolution\n\nUne fois que l'on a unifié \\( ¬A \\) avec une clause, on applique la règle de résolution. Cela consiste à éliminer les littéraux unifiés et à former une nouvelle clause à partir des littéraux restants.\n\n### d. Répétition\n\nOn répète ce processus en utilisant les nouvelles clauses générées jusqu'à obtenir une contradiction (une clause vide, notée \\( ⊥ \\)). Si une contradiction est atteinte, cela signifie que l'énoncé initial \\( A \\) est vrai.\n\n## 4. Exemple de Résolution\n\nConsidérons les clauses suivantes :\n\n1. \\( P \\lor Q \\) (si P est vrai ou Q est vrai)\n2. \\( ¬P \\) (P est faux)\n\nPour prouver \\( Q \\) :\n\n- On commence par la négation de \\( Q \\), soit \\( ¬Q \\).\n- On unifie \\( ¬Q \\) avec les clauses existantes.\n- En appliquant la résolution sur \\( P \\lor Q \\) et \\( ¬P \\), on obtient \\( Q \\) en éliminant \\( P \\).\n\nSi l'on obtient une contradiction, cela prouve que \\( Q \\) est vrai.\n\n## 5. Utilisation en Prolog\n\nEn Prolog, la résolution est utilisée pour prouver des faits ou des règles. Prolog applique la SLD-résolution (Sélectionnée, Linéaire, Défini) pour unifier les requêtes avec les faits et les règles définies dans la base de connaissances.\n\n## Conclusion\n\nLa résolution en logique des prédicats est un outil puissant pour le raisonnement automatique. Elle permet de déduire des conclusions à partir d'un ensemble de connaissances en utilisant des règles logiques et des techniques d'unification. Ce mécanisme est au cœur de nombreux systèmes de raisonnement, y compris Prolog.",
+      "subject": "Logique & Prolog",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 1.0,
+        "keyword_hit_ratio": 0.7,
+        "avg_doc_length": 1049.8,
+        "unique_sources": 6
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 0.7,
+        "keyword_coverage": 0.7,
+        "semantic_similarity": 0.6904650349069583,
+        "answer_length": 2903
+      },
+      "latency_seconds": 14.96,
+      "retrieved_sources": [
+        "CM_LD1_Slides.pdf",
+        "CM_logique.pdf",
+        "CM_LD2_Raisonnement_Slides.pdf",
+        "CM_prolog.pdf",
+        "TP_prolog.pdf",
+        "TD2.pdf"
+      ]
+    },
+    {
+      "question": "Qu'est-ce que le paradigme MapReduce et comment fonctionne-t-il ?",
+      "expected_answer": "MapReduce est un modele de programmation pour le traitement distribue de grandes quantites de donnees. Il se compose de deux phases : Map (applique une fonction a chaque element pour produire des paires cle-valeur) et Reduce (aggrege les valeurs par cle).",
+      "generated_answer": "# Qu'est-ce que le paradigme MapReduce ?\n\nLe paradigme MapReduce est un modèle de traitement distribué conçu pour traiter de très grands volumes de données de manière efficace. Il a été développé par Google pour répondre aux besoins de traitement de données déstructurées, comme les pages web et les logs des moteurs d'indexation. Ce modèle est particulièrement adapté pour l'exploration et l'analyse de données (data-mining) sur des infrastructures de matériel standard, comme des serveurs de moyenne gamme (source : Systèmes Distribués -- CM -- Ch7-MapReduce.pdf).\n\n## Objectifs de MapReduce\n- **Traitement à grande échelle** : Permet de traiter des jeux de données qui ne peuvent pas tenir dans la mémoire d'une seule machine.\n- **Distribution des traitements** : Facilite l'écriture de programmes distribués et gère les pannes potentielles des machines (source : Systèmes Distribués -- CM -- Ch7-MapReduce.pdf).\n\n# Comment fonctionne MapReduce ?\n\nLe fonctionnement de MapReduce se déroule en plusieurs étapes, qui peuvent être résumées comme suit :\n\n1. **Phase de Mapping** :\n   - Les données d'entrée sont divisées en morceaux (blocs).\n   - Chaque morceau est traité par une tâche de mapping qui génère des paires clé-valeur (K,V). La manière dont ces paires sont produites dépend de la fonction Map écrite par l'utilisateur (source : Systèmes Distribués -- CM -- Ch3-ModelesInteractions.pdf).\n\n2. **Tri et Répartition** :\n   - Les paires (K,V) générées par les tâches de mapping sont collectées par un contrôleur.\n   - Ces paires sont triées par clé, et les clés sont réparties entre les tâches de réduction. Toutes les paires ayant la même clé sont envoyées à la même tâche de réduction (source : Systèmes Distribués -- CM -- Ch3-ModelesInteractions.pdf).\n\n3. **Phase de Réduction** :\n   - Les tâches de réduction traitent les paires (K,V) en fonction de leur clé.\n   - Chaque tâche de réduction combine les valeurs associées à une clé donnée selon la logique définie dans la fonction Reduce écrite par l'utilisateur (source : Systèmes Distribués -- CM -- Ch3-ModelesInteractions.pdf).\n\n## Exemple d'application\nUn exemple classique d'application de MapReduce est le calcul du PageRank, qui évalue l'importance des pages web en utilisant des graphes. Ce type de traitement nécessite souvent des itérations sur des jeux de données de plusieurs millions d'entrées (source : Systèmes Distribués -- CM -- Ch7-MapReduce.pdf).\n\n## Gestion des erreurs\nMapReduce inclut également des mécanismes pour gérer les pannes. Par exemple, si un nœud de calcul échoue, le maître du système peut redémarrer les tâches qui étaient en cours sur ce nœud, garantissant ainsi la continuité du traitement (source : Systèmes Distribués -- CM -- Ch7-MapReduce.pdf).\n\nEn résumé, MapReduce est un paradigme puissant pour le traitement de grandes quantités de données, permettant une exécution parallèle et une gestion efficace des erreurs.",
+      "subject": "Systemes Distribues",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 0.0,
+        "keyword_hit_ratio": 1.0,
+        "avg_doc_length": 1062.0,
+        "unique_sources": 4
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 1.0,
+        "semantic_similarity": 0.8103636194451271,
+        "answer_length": 2918
+      },
+      "latency_seconds": 12.17,
+      "retrieved_sources": [
+        "Ch3-ModelesInteractions.pdf",
+        "M1_SD_FasciculeTD.pdf",
+        "Ch7-MapReduce.pdf",
+        "SGD_cm2_2024_2025_Slides.pdf"
+      ]
+    },
+    {
+      "question": "Expliquer le consensus dans les systemes distribues.",
+      "expected_answer": "Le consensus est un probleme fondamental ou un ensemble de processus doivent se mettre d'accord sur une valeur commune, meme en presence de pannes. Algorithmes : Paxos, Raft.",
+      "generated_answer": "## Le Consensus dans les Systèmes Distribués\n\n### Définition\nLe consensus dans les systèmes distribués est un processus par lequel plusieurs nœuds (ou processus) d'un système parviennent à un accord sur une valeur ou un état commun, malgré les défaillances potentielles et l'absence d'une horloge commune. Cela est crucial pour garantir la cohérence des données et le bon fonctionnement des applications distribuées.\n\n### Importance du Consensus\n- **Cohérence des Données** : Dans un système distribué, il est essentiel que tous les nœuds aient une vision cohérente des données. Le consensus permet d'éviter des situations où des nœuds différents pourraient avoir des informations contradictoires.\n- **Tolérance aux Pannes** : Les systèmes distribués doivent être capables de continuer à fonctionner même en cas de défaillance de certains nœuds. Le consensus aide à gérer ces situations en permettant aux nœuds restants de parvenir à un accord.\n\n### Problèmes Associés\nLe consensus est un problème complexe, surtout dans des environnements asynchrones. Les défis incluent :\n- **Pannes Temporaires** : Des nœuds peuvent devenir inaccessibles temporairement.\n- **Pannes Silencieuses** : Des nœuds peuvent cesser de fonctionner sans avertissement.\n- **Pannes Byzantines** : Des nœuds peuvent agir de manière malveillante ou fournir des informations incorrectes.\n\n### Algorithmes de Consensus\nIl existe plusieurs algorithmes qui ont été développés pour atteindre le consensus dans des systèmes distribués. Parmi les plus connus, on trouve :\n- **Paxos** : Un algorithme qui permet à un groupe de nœuds de parvenir à un consensus même en cas de pannes.\n- **Raft** : Un algorithme plus simple que Paxos, conçu pour être plus compréhensible tout en garantissant la même robustesse.\n- **Algorithmes de Vote** : Utilisent des mécanismes de vote pour déterminer la valeur à adopter.\n\n### Conclusion\nLe consensus est un élément fondamental des systèmes distribués, permettant de garantir la cohérence et la fiabilité des opérations malgré les défis posés par la distribution et les pannes. La compréhension des mécanismes de consensus est essentielle pour concevoir des systèmes distribués robustes et efficaces.\n\n### Sources\n- [Systèmes Distribués -- CM -- Ch1-Introduction.pdf] : Introduction aux systèmes distribués et leurs propriétés.\n- [Systèmes Distribués -- CM -- Ch2-Algorithmes.pdf] : Principes des algorithmes d'élection et de consensus.",
+      "subject": "Systemes Distribues",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 0.0,
+        "keyword_hit_ratio": 0.5,
+        "avg_doc_length": 1069.5,
+        "unique_sources": 6
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 1.0,
+        "semantic_similarity": 0.7480396683215431,
+        "answer_length": 2436
+      },
+      "latency_seconds": 10.81,
+      "retrieved_sources": [
+        "Ch1-Introduction.pdf",
+        "SGD_cm3_2024_2025_Slides.pdf",
+        "M1_SD_FasciculeTD.pdf",
+        "Ch2-Algorithmes.pdf",
+        "CM_Res.pdf",
+        "Ch3-ModelesInteractions.pdf"
+      ]
+    },
+    {
+      "question": "Quelles sont les couches du modele OSI et a quoi servent-elles ?",
+      "expected_answer": "Le modele OSI comporte 7 couches : Physique, Liaison, Reseau, Transport, Session, Presentation, Application. Chaque couche fournit des services a la couche superieure et utilise les services de la couche inferieure.",
+      "generated_answer": "### Les Couches du Modèle OSI\n\nLe modèle OSI (Open Systems Interconnection) est une norme qui définit une architecture de communication en sept couches. Chaque couche a un rôle spécifique dans le processus de communication entre les systèmes. Voici un aperçu des couches et de leurs fonctions :\n\n1. **Couche 1 : Couche Physique**\n   - **Fonction** : Gère la transmission des données brutes sur le support physique (câbles, fibres optiques, etc.).\n   - **Exemples** : Signaux électriques, caractéristiques des connecteurs, modulation.\n\n2. **Couche 2 : Couche Liaison de Données**\n   - **Fonction** : Assure la transmission fiable des données entre deux nœuds directement connectés. Elle gère la détection et la correction des erreurs.\n   - **Exemples** : Protocoles comme Ethernet, Wi-Fi.\n\n3. **Couche 3 : Couche Réseau**\n   - **Fonction** : Gère le routage des paquets de données à travers le réseau. Elle détermine le chemin que les données doivent emprunter pour atteindre leur destination.\n   - **Exemples** : Protocole IP (Internet Protocol).\n\n4. **Couche 4 : Couche Transport**\n   - **Fonction** : Assure la livraison fiable des données entre les applications. Elle gère le contrôle de flux et la segmentation des données.\n   - **Exemples** : TCP (Transmission Control Protocol), UDP (User Datagram Protocol).\n\n5. **Couche 5 : Couche Session**\n   - **Fonction** : Gère les sessions de communication entre les applications. Elle établit, maintient et termine les connexions.\n   - **Exemples** : Protocoles de gestion de session.\n\n6. **Couche 6 : Couche Présentation**\n   - **Fonction** : Traduit les données entre le format utilisé par l'application et le format utilisé par le réseau. Elle gère également le chiffrement et la compression des données.\n   - **Exemples** : Formats de fichiers, SSL/TLS pour le chiffrement.\n\n7. **Couche 7 : Couche Application**\n   - **Fonction** : Fournit des services de communication aux applications. C'est l'interface entre l'utilisateur et le réseau.\n   - **Exemples** : HTTP, FTP, SMTP.\n\n### Conclusion\n\nLe modèle OSI est essentiel pour comprendre comment les données circulent dans un réseau. Chaque couche a des responsabilités spécifiques qui contribuent à la communication efficace et fiable entre les systèmes. Ce modèle aide également à standardiser les protocoles et à faciliter l'interopérabilité entre différents systèmes et technologies.\n\n**Source** : [Cloud & Réseaux -- CM -- Cours1-3.pdf] et [Cloud & Réseaux -- CM -- CM_Res.pdf]",
+      "subject": "Cloud & Reseaux",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 0.0,
+        "keyword_hit_ratio": 1.0,
+        "avg_doc_length": 634.2,
+        "unique_sources": 4
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 1.0,
+        "semantic_similarity": 0.8632861864876019,
+        "answer_length": 2484
+      },
+      "latency_seconds": 11.55,
+      "retrieved_sources": [
+        "Cours1-3.pdf",
+        "CM-RéseauxCouchesHautes.pdf",
+        "Resume_Reseaux.pdf",
+        "CM_Res.pdf"
+      ]
+    },
+    {
+      "question": "Quels sont les principes SOLID en genie logiciel ?",
+      "expected_answer": "SOLID : Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion.",
+      "generated_answer": "Les principes SOLID sont un ensemble de cinq principes de conception orientée objet qui visent à rendre le code plus compréhensible, flexible et maintenable. Voici un aperçu de chacun de ces principes :\n\n### 1. **Single Responsibility Principle (SRP) - Principe de Responsabilité Unique**\n- **Définition** : Une classe doit avoir une seule raison de changer, c'est-à-dire qu'elle ne doit avoir qu'une seule responsabilité.\n- **Exemple** : Si une classe gère à la fois la logique métier et l'accès aux données, elle a deux responsabilités. Il serait préférable de séparer ces responsabilités en deux classes distinctes.\n\n### 2. **Open/Closed Principle (OCP) - Principe Ouvert/Fermé**\n- **Définition** : Les entités (classes, modules, fonctions, etc.) doivent être ouvertes à l'extension mais fermées à la modification.\n- **Exemple** : Utiliser des interfaces ou des classes abstraites pour permettre l'ajout de nouvelles fonctionnalités sans modifier le code existant.\n\n### 3. **Liskov Substitution Principle (LSP) - Principe de Substitution de Liskov**\n- **Définition** : Les objets d'une classe dérivée doivent pouvoir remplacer les objets de la classe de base sans altérer le bon fonctionnement du programme.\n- **Exemple** : Si une classe `Oiseau` a une méthode `voler`, une classe dérivée `Pingouin` ne devrait pas être une sous-classe de `Oiseau` si elle ne peut pas voler.\n\n### 4. **Interface Segregation Principle (ISP) - Principe de Ségrégation des Interfaces**\n- **Définition** : Il est préférable d'avoir plusieurs interfaces spécifiques plutôt qu'une seule interface générale.\n- **Exemple** : Au lieu d'avoir une interface `Animal` avec des méthodes comme `manger`, `voler`, et `nager`, il serait mieux d'avoir des interfaces séparées comme `IAviary` et `IAquatic`.\n\n### 5. **Dependency Inversion Principle (DIP) - Principe d'Inversion des Dépendances**\n- **Définition** : Les modules de haut niveau ne doivent pas dépendre des modules de bas niveau. Les deux doivent dépendre d'abstractions (par exemple, des interfaces).\n- **Exemple** : Au lieu qu'une classe `GestionnaireDeCommande` dépende directement d'une classe `BaseDeDonnées`, elle devrait dépendre d'une interface `IDatabase` que `BaseDeDonnées` implémente.\n\n### Conclusion\nL'application des principes SOLID aide à créer un code plus modulaire et plus facile à tester, ce qui est essentiel dans le développement de logiciels de qualité. En suivant ces principes, les développeurs peuvent améliorer la maintenabilité et la compréhension de leur code.\n\nCes principes sont souvent abordés dans le cadre de la conception de logiciels et de la programmation orientée objet, ce qui est pertinent dans le contexte de votre formation en génie logiciel.",
+      "subject": "Genie Logiciel",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 0.0,
+        "keyword_hit_ratio": 0.16666666666666666,
+        "avg_doc_length": 1290.9,
+        "unique_sources": 9
+      },
+      "answer": {
+        "faithfulness_score": 0.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 1.0,
+        "semantic_similarity": 0.6715103153523542,
+        "answer_length": 2714
+      },
+      "latency_seconds": 12.13,
+      "retrieved_sources": [
+        "M1_Algo_2025-1-285-CM.pdf",
+        "Ch1-Introduction.pdf",
+        "CM1-2.pdf",
+        "SGD_cm1_2024_2025_Slides.pdf",
+        "CM_prolog.pdf",
+        "Ch5-JavaRMI.pdf",
+        "CM2_2023.pdf",
+        "CM_LD1.pdf",
+        "BPMN-TP1-2024-Process_Informatique.pdf"
+      ]
+    },
+    {
+      "question": "Qu'est-ce que le pattern MVC ?",
+      "expected_answer": "MVC (Modele-Vue-Controleur) est un patron d'architecture qui separe l'application en trois composants : le Modele (donnees), la Vue (interface) et le Controleur (logique).",
+      "generated_answer": "### Qu'est-ce que le pattern MVC ?\n\nLe pattern MVC, qui signifie **Model-View-Controller**, est un modèle architectural utilisé dans le développement d'applications, notamment dans le développement web. Il permet de structurer le code de manière à séparer les différentes préoccupations d'une application, ce qui facilite la maintenance et l'évolution du code.\n\n#### Composants du pattern MVC\n\n1. **Model (Modèle)** :\n   - Représente les données de l'application et la logique métier.\n   - Gère l'accès aux données, que ce soit à partir d'une base de données, d'un fichier ou d'une API.\n   - Notifie la vue des changements dans les données.\n\n2. **View (Vue)** :\n   - Représente l'interface utilisateur.\n   - Affiche les données fournies par le modèle.\n   - Ne contient pas de logique métier, mais peut contenir des éléments de présentation.\n\n3. **Controller (Contrôleur)** :\n   - Agit comme un intermédiaire entre le modèle et la vue.\n   - Reçoit les entrées de l'utilisateur (comme des clics ou des saisies) et les traite.\n   - Met à jour le modèle en fonction des actions de l'utilisateur et peut également mettre à jour la vue.\n\n#### Avantages du pattern MVC\n\n- **Séparation des préoccupations** : Chaque composant a une responsabilité distincte, ce qui rend le code plus organisé et plus facile à gérer.\n- **Facilité de test** : Les tests peuvent être effectués sur chaque composant indépendamment.\n- **Réutilisabilité** : Les composants peuvent être réutilisés dans d'autres projets ou parties de l'application.\n\n### Comparaison avec le modèle MVVM\n\nIl est intéressant de noter que le modèle MVVM (Model-View-ViewModel), utilisé par des frameworks comme Vue.js, est similaire au MVC. Dans MVVM, la ViewModel joue un rôle d'intermédiaire entre la vue et le modèle, facilitant le data binding et la gestion des interactions utilisateur. Cela permet une séparation encore plus fine des préoccupations, en particulier dans les applications riches en interfaces utilisateur.\n\n#### Conclusion\n\nLe pattern MVC est un fondement important dans le développement d'applications, permettant une architecture claire et maintenable. En comprenant ce modèle, vous serez mieux préparé à développer des applications web efficaces et évolutives. \n\n**Source** : [Conception Web Avancée -- CM -- CM4_New.pdf] (Architecture Vue.js)",
+      "subject": "Conception Web Avancee",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 0.0,
+        "keyword_hit_ratio": 0.8333333333333334,
+        "avg_doc_length": 880.8,
+        "unique_sources": 9
+      },
+      "answer": {
+        "faithfulness_score": 0.8,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 1.0,
+        "semantic_similarity": 0.7101195268929414,
+        "answer_length": 2315
+      },
+      "latency_seconds": 11.18,
+      "retrieved_sources": [
+        "sujet_projet.pdf",
+        "SGD_cm1_2024_2025_Slides.pdf",
+        "Ch5-JavaRMI.pdf",
+        "CM_prolog.pdf",
+        "CM2_2023.pdf",
+        "GenieLogiciel_M1-Info_CM1.pdf",
+        "BPMN-TP1-2024-Process_Informatique.pdf",
+        "CM4_New.pdf",
+        "Ch3-ModelesInteractions.pdf"
+      ]
+    },
+    {
+      "question": "Qu'est-ce que l'ACP (Analyse en Composantes Principales) ?",
+      "expected_answer": "L'ACP est une methode de reduction de dimensionnalite qui projette les donnees sur les axes de variance maximale (composantes principales).",
+      "generated_answer": "### Qu'est-ce que l'Analyse en Composantes Principales (ACP) ?\n\nL'Analyse en Composantes Principales (ACP) est une méthode statistique utilisée pour réduire la dimensionnalité d'un ensemble de données tout en préservant autant que possible la variance présente dans ces données. Voici les points clés à retenir :\n\n#### Objectifs de l'ACP\n- **Réduction de dimensionnalité** : L'ACP permet de transformer un grand nombre de variables en un plus petit nombre de variables (appelées composantes principales) qui conservent la majorité de l'information.\n- **Visualisation** : Elle facilite la visualisation des données en réduisant le nombre de dimensions, ce qui est particulièrement utile pour des données à haute dimension.\n- **Identification de structures** : L'ACP aide à identifier des structures sous-jacentes dans les données, telles que des regroupements ou des tendances.\n\n#### Fonctionnement de l'ACP\n1. **Standardisation des données** : Les données sont souvent standardisées pour que chaque variable ait une moyenne de 0 et un écart-type de 1. Cela est crucial lorsque les variables sont sur des échelles différentes.\n2. **Calcul de la matrice de covariance** : On calcule la matrice de covariance pour comprendre comment les variables varient ensemble.\n3. **Calcul des valeurs propres et vecteurs propres** : On détermine les valeurs propres et les vecteurs propres de la matrice de covariance. Les valeurs propres indiquent l'importance des composantes principales, tandis que les vecteurs propres définissent la direction de ces composantes.\n4. **Sélection des composantes principales** : On sélectionne les composantes principales en fonction de leurs valeurs propres, en gardant celles qui expliquent le plus de variance.\n5. **Projection des données** : Les données originales sont projetées sur les nouvelles composantes principales, réduisant ainsi la dimensionnalité.\n\n#### Applications de l'ACP\n- **Prétraitement des données** : Avant d'appliquer d'autres techniques d'analyse ou de machine learning.\n- **Visualisation** : Pour représenter graphiquement des données complexes.\n- **Compression de données** : Réduire la taille des données tout en conservant l'information essentielle.\n\n### Conclusion\nL'ACP est un outil puissant en analyse de données et en apprentissage automatique, permettant de simplifier des ensembles de données complexes tout en conservant les caractéristiques essentielles. \n\n(Source : Intelligence Artificielle -- CM -- CM1-2.pdf)",
+      "subject": "Analyse Exploratoire de Donnees",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 0.0,
+        "keyword_hit_ratio": 0.6,
+        "avg_doc_length": 763.0,
+        "unique_sources": 5
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 1.0,
+        "semantic_similarity": 0.8162524769462904,
+        "answer_length": 2471
+      },
+      "latency_seconds": 8.12,
+      "retrieved_sources": [
+        "M1_Algo_2025-1-285-CM.pdf",
+        "CM1.pdf",
+        "CM1-2.pdf",
+        "SGD_cm1_2024_2025_Slides.pdf",
+        "td_corrige-35-44-correctionTD5.pdf"
+      ]
+    },
+    {
+      "question": "Qu'est-ce que la normalisation dans les bases de donnees relationnelles ?",
+      "expected_answer": "La normalisation est un processus de structuration des tables pour eliminer la redondance et les anomalies. Formes normales : 1NF, 2NF, 3NF, BCNF.",
+      "generated_answer": "### La Normalisation dans les Bases de Données Relationnelles\n\nLa normalisation est un processus essentiel dans la conception des bases de données relationnelles. Elle vise à structurer les données de manière à réduire la redondance et à améliorer l'intégrité des données. Voici les points clés à retenir :\n\n#### Objectifs de la Normalisation\n- **Éviter la Redondance** : La normalisation permet de s'assurer que les données ne sont pas dupliquées dans plusieurs tables, ce qui réduit le risque d'incohérences.\n- **Facilité de Mise à Jour** : En évitant la redondance, les mises à jour des données deviennent plus simples et moins sujettes à erreurs.\n- **Intégrité des Données** : La normalisation aide à maintenir l'intégrité des données en s'assurant que les relations entre les tables sont correctement définies.\n\n#### Étapes de la Normalisation\nLa normalisation se fait généralement en plusieurs étapes, appelées formes normales (FN). Les trois premières formes normales sont les plus couramment utilisées :\n\n1. **Première Forme Normale (1FN)** : \n   - Les données doivent être atomiques, c'est-à-dire que chaque colonne doit contenir des valeurs indivisibles.\n   - Chaque enregistrement doit être unique.\n\n2. **Deuxième Forme Normale (2FN)** : \n   - Doit respecter la 1FN.\n   - Tous les attributs non clés doivent dépendre entièrement de la clé primaire, et non d'une partie de celle-ci.\n\n3. **Troisième Forme Normale (3FN)** : \n   - Doit respecter la 2FN.\n   - Aucun attribut non clé ne doit dépendre d'un autre attribut non clé.\n\n#### Avantages et Inconvénients\n- **Avantages** :\n  - Réduction de la redondance.\n  - Amélioration de la cohérence des données.\n  - Facilite les mises à jour et les suppressions.\n\n- **Inconvénients** :\n  - Coût d'accès aux données qui ne sont pas stockées de façon contiguë.\n  - Coût de la réalisation de jointures entre les tables, ce qui peut ralentir les requêtes.\n\n### Conclusion\nLa normalisation est un concept fondamental dans le modèle relationnel qui permet de structurer les données de manière efficace. Cependant, il est également important de considérer les besoins spécifiques de l'application, car dans certains cas, une dénormalisation peut être envisagée pour optimiser les performances des requêtes (source : SGD – CM1 – Modélisation).",
+      "subject": "Systemes de Gestion de Donnees",
+      "retrieval": {
+        "num_docs_retrieved": 10,
+        "subject_match_ratio": 0.0,
+        "keyword_hit_ratio": 0.2857142857142857,
+        "avg_doc_length": 867.5,
+        "unique_sources": 3
+      },
+      "answer": {
+        "faithfulness_score": 1.0,
+        "relevance_score": 1.0,
+        "completeness_score": 1.0,
+        "keyword_coverage": 0.2857142857142857,
+        "semantic_similarity": 0.7578735236456849,
+        "answer_length": 2288
+      },
+      "latency_seconds": 10.32,
+      "retrieved_sources": [
+        "SGD_TD1_2025.pdf",
+        "SGD_cm1_2024_2025_Slides.pdf",
+        "Ch1-Introduction.pdf"
+      ]
+    }
+  ]
+}
