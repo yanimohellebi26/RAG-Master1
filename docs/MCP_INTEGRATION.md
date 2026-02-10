@@ -451,7 +451,7 @@ Traitement d'images, OCR, text-to-speech.
 - [ ] github
 
 **Interface :**
-- [ ] Interface web modulaire
+- [X] Interface web modulaire
 
 ---
 

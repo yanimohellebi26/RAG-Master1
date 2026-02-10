@@ -31,3 +31,18 @@ class EvaluationError(RAGException):
 class CopilotError(RAGException):
     """Raised when there's an error with Copilot SDK."""
     pass
+
+
+class MCPError(RAGException):
+    """Raised when there's an error with an MCP server."""
+    pass
+
+
+class MCPConnectionError(MCPError):
+    """Raised when an MCP server connection fails."""
+    pass
+
+
+class MCPToolError(MCPError):
+    """Raised when an MCP tool execution fails."""
+    pass

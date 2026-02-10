@@ -57,3 +57,107 @@ watch_mode:
   enabled: false
   check_interval_seconds: 60
   auto_reindex: true
+
+# ---------------------------------------------------------------------------
+# Configuration des serveurs MCP
+# Activer un serveur : enabled: true + credentials necessaires
+# ---------------------------------------------------------------------------
+mcp:
+  # Outils personnels (priorite haute)
+  gmail:
+    enabled: false
+    # credentials_path: ./credentials/gmail.json
+  terminal:
+    enabled: false
+    sandbox: true
+    allowed_commands: []
+  canva:
+    enabled: false
+    # api_key: ""
+
+  # Acquisition de contenu
+  youtube-transcript:
+    enabled: false
+    default_language: fr
+  notion:
+    enabled: false
+    # api_key: ""
+  google-drive:
+    enabled: false
+    # credentials_path: ./credentials/gdrive.json
+  browser:
+    enabled: false
+    headless: true
+  filesystem:
+    enabled: false
+    allowed_paths: []
+
+  # Recherche et veille
+  brave-search:
+    enabled: false
+    # api_key: ""
+  exa:
+    enabled: false
+    # api_key: ""
+  arxiv:
+    enabled: false
+  semantic-scholar:
+    enabled: false
+    # api_key: ""
+  wikipedia:
+    enabled: false
+    default_lang: fr
+
+  # Images et media
+  vision:
+    enabled: false
+  ocr:
+    enabled: false
+    engine: tesseract
+  dalle:
+    enabled: false
+    default_size: 1024x1024
+  tts:
+    enabled: false
+    default_voice: alloy
+
+  # Code et execution
+  code-interpreter:
+    enabled: false
+    timeout: 30
+  docker:
+    enabled: false
+  jupyter:
+    enabled: false
+
+  # Organisation
+  google-calendar:
+    enabled: false
+    # credentials_path: ./credentials/gcalendar.json
+  todoist:
+    enabled: false
+    # api_key: ""
+
+  # Communication
+  discord:
+    enabled: false
+    # bot_token: ""
+  slack:
+    enabled: false
+    # bot_token: ""
+
+  # Memoire et donnees
+  memory:
+    enabled: false
+    storage_path: ./data/memory
+  sqlite:
+    enabled: false
+    db_path: ./data/assistant.db
+  qdrant:
+    enabled: false
+    # url: http://localhost:6333
+
+  # Git
+  github:
+    enabled: false
+    # token: ""

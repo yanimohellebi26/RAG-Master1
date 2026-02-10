@@ -155,6 +155,26 @@ ALL_SUBJECTS: list[str] = [
 ]
 
 # ---------------------------------------------------------------------------
+# MCP (Model Context Protocol)
+# ---------------------------------------------------------------------------
+
+MCP_CONNECT_TIMEOUT: float = 30.0
+MCP_EXECUTE_TIMEOUT: float = 60.0
+MCP_HEALTH_CHECK_INTERVAL: int = 300  # seconds
+
+MCP_CATEGORIES: dict[str, str] = {
+    "personal": "Outils personnels",
+    "content": "Acquisition de contenu",
+    "search": "Recherche et veille",
+    "media": "Images et media",
+    "code": "Code et execution",
+    "organization": "Organisation",
+    "communication": "Communication",
+    "memory": "Memoire et donnees",
+    "git": "Git",
+}
+
+# ---------------------------------------------------------------------------
 # Copilot Tool Labels
 # ---------------------------------------------------------------------------
 

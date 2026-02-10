@@ -17,6 +17,7 @@ from api.blueprints.chat import chat_bp
 from api.blueprints.copilot import copilot_bp
 from api.blueprints.evaluation import eval_bp
 from api.blueprints.config import config_bp
+from api.blueprints.mcp import mcp_bp
 
 logger = logging.getLogger(__name__)
 
@@ -58,11 +59,30 @@ def create_app() -> Flask:
     app.register_blueprint(copilot_bp, url_prefix="/api")
     app.register_blueprint(eval_bp, url_prefix="/api")
     app.register_blueprint(config_bp, url_prefix="/api")
+    app.register_blueprint(mcp_bp, url_prefix="/api")
+
+    # -- Initialise MCP registry --------------------------------------------
+    _init_mcp(app)
 
     # -- SPA catch-all routes -----------------------------------------------
     _register_spa_routes(app, dist_dir)
 
     return app
+
+
+def _init_mcp(app: Flask) -> None:
+    """Discover and configure all MCP servers from config.yaml."""
+    try:
+        import mcp.discovery  # noqa: F401  -- auto-registers all servers
+        from mcp import mcp_registry
+        from core.config import load_config
+
+        config = load_config()
+        mcp_config = config.get("mcp", {})
+        mcp_registry.configure_all(mcp_config)
+        logger.info(f"MCP registry: {mcp_registry.stats}")
+    except Exception as exc:
+        logger.warning(f"MCP initialization skipped: {exc}")
 
 
 def _register_spa_routes(app: Flask, dist_dir: str) -> None:
