@@ -43,3 +43,10 @@ frontend/dist/
 .pytest_cache/
 htmlcov/
 .coverage
+
+# Claude Code
+.claude/
+
+# GSD
+GSD_COMMANDS.md
+.planning/
