@@ -5,33 +5,32 @@ Uses ChromaDB as the vector store, GPT-4o-mini as the primary LLM,
 and the GitHub Copilot SDK for complementary visual tools.
 """
 
-import os
 import time
 from datetime import datetime
-from pathlib import Path
 from typing import Any
 
 import pandas as pd
 import streamlit as st
-from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage, AIMessage
 
-from copilot_client import (
+from core.config import OPENAI_API_KEY, CHROMA_DIR
+
+from tools.copilot import (
     copilot_generate,
     is_copilot_ready,
     get_available_models,
     TOOL_LABELS,
     COPILOT_SDK_AVAILABLE,
 )
-from rag_improvements import (
+from core.retrieval import (
     BM25Index,
     enhanced_retrieve,
     rewrite_query,
 )
-from evaluation import (
+from evaluation.evaluator import (
     run_evaluation,
     save_results,
     load_results,
@@ -43,11 +42,6 @@ from evaluation import (
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-
-load_dotenv()
-
-OPENAI_API_KEY: str | None = os.getenv("OPENAI_api_key")
-CHROMA_DIR: Path = Path(__file__).parent / "chroma_db"
 
 ALL_SUBJECTS: list[str] = [
     "Algorithmique",
@@ -151,7 +145,7 @@ if not OPENAI_API_KEY:
     st.stop()
 
 if not CHROMA_DIR.exists():
-    st.error("Base vectorielle introuvable. Lancez d'abord : python indexer.py")
+    st.error("Base vectorielle introuvable. Lancez d'abord : python -m scripts.index")
     st.stop()
 
 # ---------------------------------------------------------------------------

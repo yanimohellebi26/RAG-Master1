@@ -108,14 +108,9 @@ _PROMPTS: dict[str, str] = {
 
 
 def _extract_json_object(text: str) -> str:
-    """Extract the outermost JSON object ``{...}`` from *text*.
-
-    Strips markdown code fences and stray backticks before locating the
-    first ``{`` and last ``}``.
-    """
+    """Extract the outermost JSON object ``{...}`` from *text*."""
     cleaned = text.strip()
 
-    # Remove markdown code fences (```json ... ``` or ``` ... ```)
     if cleaned.startswith("```"):
         end_fence = cleaned.find("```", 3)
         if end_fence != -1:
@@ -159,12 +154,7 @@ async def _generate_async(
     n: int = 5,
     sources: list[dict[str, str]] | None = None,
 ) -> dict[str, Any]:
-    """Generate structured JSON content through the Copilot SDK.
-
-    A fresh ``CopilotClient`` is created for every call because
-    ``asyncio.run()`` closes its event loop on completion, making any
-    previously-created client unusable.
-    """
+    """Generate structured JSON content through the Copilot SDK."""
     template = _PROMPTS.get(tool_type)
     if template is None:
         return {"error": f"Type d'outil inconnu : {tool_type}"}
@@ -264,11 +254,7 @@ def copilot_generate(
     n: int = 5,
     sources: list[dict[str, str]] | None = None,
 ) -> dict[str, Any]:
-    """Synchronous entry point for Copilot content generation.
-
-    Delegates to :func:`_generate_async` inside a fresh ``asyncio.run()``
-    event loop so that Streamlit's own loop is never disturbed.
-    """
+    """Synchronous entry point for Copilot content generation."""
     if not COPILOT_SDK_AVAILABLE:
         return {"error": "SDK Copilot non installe."}
 

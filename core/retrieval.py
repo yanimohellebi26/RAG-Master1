@@ -66,7 +66,6 @@ def rewrite_query(
         response = llm.invoke(msgs)
         text = response.content.strip()
 
-        # Parse JSON
         start = text.find("{")
         end = text.rfind("}")
         if start != -1 and end != -1:
@@ -122,7 +121,7 @@ def generate_multi_queries(
     except Exception:
         pass
 
-    return queries[:4]  # cap at 4
+    return queries[:4]
 
 
 # ---------------------------------------------------------------------------
@@ -150,17 +149,7 @@ def _tokenize(text: str) -> list[str]:
 
 
 class BM25Index:
-    """Minimal BM25 index over a list of LangChain documents.
-
-    Parameters
-    ----------
-    documents : list[Document]
-        Documents to index (page_content used for scoring).
-    k1 : float
-        Term frequency saturation parameter (default 1.5).
-    b : float
-        Length normalisation parameter (default 0.75).
-    """
+    """Minimal BM25 index over a list of LangChain documents."""
 
     def __init__(
         self,
@@ -176,7 +165,6 @@ class BM25Index:
         self._doc_freqs: list[Counter] = []
         self._idf: dict[str, float] = {}
 
-        # Build index
         n = len(documents)
         df: Counter = Counter()
         total_len = 0
@@ -191,7 +179,6 @@ class BM25Index:
 
         self._avgdl = total_len / n if n else 1.0
 
-        # IDF (with smoothing)
         for term, doc_count in df.items():
             self._idf[term] = math.log(
                 (n - doc_count + 0.5) / (doc_count + 0.5) + 1.0
@@ -217,7 +204,6 @@ class BM25Index:
                 score += idf * numerator / denominator
             scores.append(score)
 
-        # Top-k indices
         ranked = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
         results = []
         for i in ranked[:k]:
@@ -242,14 +228,10 @@ def hybrid_search(
     fetch_k: int | None = None,
     filter_dict: dict | None = None,
 ) -> list[Document]:
-    """Combine semantic (vector) and BM25 keyword search results.
-
-    Uses reciprocal rank fusion (RRF) to merge the two ranked lists.
-    """
+    """Combine semantic (vector) and BM25 keyword search results via RRF."""
     if fetch_k is None:
         fetch_k = k * 3
 
-    # Semantic results
     search_kwargs: dict[str, Any] = {"k": k, "fetch_k": fetch_k}
     if filter_dict:
         search_kwargs["filter"] = filter_dict
@@ -263,12 +245,10 @@ def hybrid_search(
     if bm25_index is None:
         return semantic_docs
 
-    # BM25 results
     bm25_results = bm25_index.query(query, k=k)
     bm25_docs = [doc for doc, _ in bm25_results]
 
-    # Reciprocal Rank Fusion (RRF)
-    rrf_constant = 60  # standard RRF constant
+    rrf_constant = 60
     scores: dict[str, float] = {}
     doc_map: dict[str, Document] = {}
 
@@ -284,7 +264,6 @@ def hybrid_search(
         scores[doc_id] = scores.get(doc_id, 0.0) + rrf_score
         doc_map[doc_id] = doc
 
-    # Sort by fused score
     ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)
     return [doc_map[doc_id] for doc_id, _ in ranked[:k]]
 
@@ -318,14 +297,10 @@ def compress_documents(
     llm: ChatOpenAI,
     max_docs: int = 8,
 ) -> list[Document]:
-    """Filter and compress documents to keep only relevant passages.
-
-    Processes up to *max_docs* documents to control API costs.
-    """
+    """Filter and compress documents to keep only relevant passages."""
     compressed: list[Document] = []
 
     for doc in docs[:max_docs]:
-        # Skip very short docs (likely already focused)
         if len(doc.page_content) < 200:
             compressed.append(doc)
             continue
@@ -345,10 +320,8 @@ def compress_documents(
                 )
                 compressed.append(new_doc)
         except Exception:
-            # On error, keep the original
             compressed.append(doc)
 
-    # Keep remaining docs unchanged
     compressed.extend(docs[max_docs:])
     return compressed
 
@@ -377,10 +350,7 @@ def rerank_documents(
     llm: ChatOpenAI,
     top_k: int = 8,
 ) -> list[Document]:
-    """Re-rank documents by relevance using LLM scoring.
-
-    Re-ranks all docs and returns the top *top_k* by score.
-    """
+    """Re-rank documents by relevance using LLM scoring."""
     scored: list[tuple[Document, float]] = []
 
     for doc in docs:
@@ -405,7 +375,6 @@ def rerank_documents(
         except Exception:
             scored.append((doc, 5.0))
 
-    # Sort by score descending
     scored.sort(key=lambda x: x[1], reverse=True)
     return [doc for doc, _ in scored[:top_k]]
 
@@ -428,32 +397,15 @@ def enhanced_retrieve(
     enable_rerank: bool = True,
     enable_compress: bool = True,
 ) -> dict[str, Any]:
-    """Full enhanced retrieval pipeline.
-
-    Steps:
-    1. Query rewriting (optional)
-    2. Hybrid search: semantic + BM25 (optional)
-    3. LLM re-ranking (optional)
-    4. Contextual compression (optional)
-
-    Returns
-    -------
-    dict with keys:
-        - 'documents': list[Document] -- final relevant documents
-        - 'rewritten_query': str -- the query used for retrieval
-        - 'original_query': str
-        - 'steps_applied': list[str] -- which pipeline steps ran
-    """
+    """Full enhanced retrieval pipeline."""
     steps: list[str] = []
     query_for_search = question
 
-    # Step 1: Query rewriting
     if enable_rewrite:
         rewrite_result = rewrite_query(question, llm, chat_context)
         query_for_search = rewrite_result["rewritten"]
         steps.append("query_rewrite")
 
-    # Step 2: Retrieval (hybrid or semantic-only)
     if enable_hybrid and bm25_index is not None:
         docs = hybrid_search(
             query_for_search,
@@ -478,12 +430,10 @@ def enhanced_retrieve(
         docs = retriever.invoke(query_for_search)
         steps.append("semantic_search")
 
-    # Step 3: Re-ranking
     if enable_rerank and len(docs) > 3:
         docs = rerank_documents(question, docs, llm, top_k=nb_sources)
         steps.append("rerank")
 
-    # Step 4: Contextual compression
     if enable_compress:
         docs = compress_documents(question, docs, llm, max_docs=6)
         steps.append("compress")

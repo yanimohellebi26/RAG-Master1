@@ -1,0 +1,59 @@
+# Configuration RAG Master 1
+# Chemins et parametres d'indexation
+
+# Dossier contenant les cours a indexer
+courses_dir: ./Master1
+
+# Dossier de la base vectorielle ChromaDB
+chroma_dir: ./chroma_db
+
+# Parametres de decoupage des documents
+chunk_size: 3000
+chunk_overlap: 400
+
+# Taille minimale pour un document/ligne
+min_page_length: 50
+min_line_length: 3
+
+# Parametres d'embedding et indexation
+embedding_model: text-embedding-3-small
+batch_size: 400
+max_retries: 6
+
+# Extensions de fichiers supportees
+supported_extensions:
+  - .pdf
+  - .txt
+  - .csv
+
+# Patterns de fichiers/dossiers a exclure
+excluded_patterns:
+  - "*.pyc"
+  - "*.pyo"
+  - "__pycache__"
+  - ".git"
+  - ".venv"
+  - "venv"
+  - "node_modules"
+  - ".DS_Store"
+  - "*.log"
+  - ".pytest_cache"
+
+# Mapping des noms de dossiers vers les noms de matieres
+subject_names:
+  Algo: "Algorithmique"
+  AnalyseExplo: "Analyse Exploratoire de Donnees"
+  Cloud: "Cloud & Reseaux"
+  CWA: "Conception Web Avancee"
+  GenieLog: "Genie Logiciel"
+  IA: "Intelligence Artificielle"
+  Logique: "Logique & Prolog"
+  SGBDGraphes: "SGBD Graphes"
+  SGD: "Systemes de Gestion de Donnees"
+  SystDistri: "Systemes Distribues"
+
+# Mode watch : surveillance automatique des modifications
+watch_mode:
+  enabled: false
+  check_interval_seconds: 60
+  auto_reindex: true

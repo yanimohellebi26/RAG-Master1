@@ -17,20 +17,11 @@ from typing import Any
 from dataclasses import dataclass, field, asdict
 
 import numpy as np
-from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 
-# ---------------------------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------------------------
-
-load_dotenv()
-
-OPENAI_API_KEY: str | None = os.getenv("OPENAI_api_key")
-CHROMA_DIR: Path = Path(__file__).parent / "chroma_db"
-EVAL_RESULTS_DIR: Path = Path(__file__).parent / "eval_results"
+from core.config import OPENAI_API_KEY, CHROMA_DIR, EVAL_RESULTS_DIR
 
 # ---------------------------------------------------------------------------
 # Evaluation dataset -- ground-truth Q&A pairs per subject
@@ -135,8 +126,8 @@ EVAL_DATASET: list[dict[str, Any]] = [
 class RetrievalMetrics:
     """Metrics about the quality of retrieved documents."""
     num_docs_retrieved: int = 0
-    subject_match_ratio: float = 0.0     # % of docs from the expected subject
-    keyword_hit_ratio: float = 0.0       # % of expected keywords found in docs
+    subject_match_ratio: float = 0.0
+    keyword_hit_ratio: float = 0.0
     avg_doc_length: float = 0.0
     unique_sources: int = 0
 
@@ -144,11 +135,11 @@ class RetrievalMetrics:
 @dataclass
 class AnswerMetrics:
     """Metrics about the generated answer quality."""
-    faithfulness_score: float = 0.0      # 0-1: answer grounded in context?
-    relevance_score: float = 0.0         # 0-1: answer addresses the question?
-    completeness_score: float = 0.0      # 0-1: covers expected answer content?
-    keyword_coverage: float = 0.0        # % of expected keywords in answer
-    semantic_similarity: float = 0.0     # cosine similarity expected vs generated
+    faithfulness_score: float = 0.0
+    relevance_score: float = 0.0
+    completeness_score: float = 0.0
+    keyword_coverage: float = 0.0
+    semantic_similarity: float = 0.0
     answer_length: int = 0
 
 
@@ -177,8 +168,8 @@ class EvalSummary:
     avg_subject_match: float = 0.0
     avg_keyword_hit: float = 0.0
     avg_latency: float = 0.0
-    overall_score: float = 0.0          # weighted composite
-    timestamp: str = ""                  # ISO timestamp of eval run
+    overall_score: float = 0.0
+    timestamp: str = ""
     results: list[dict] = field(default_factory=list)
 
 
@@ -259,7 +250,6 @@ COMPLETENESS_PROMPT = ChatPromptTemplate.from_messages([
 def _parse_llm_score(response_text: str) -> tuple[float, str]:
     """Extract score and justification from LLM judge response."""
     try:
-        # Try direct JSON parse
         text = response_text.strip()
         start = text.find("{")
         end = text.rfind("}")
@@ -269,8 +259,6 @@ def _parse_llm_score(response_text: str) -> tuple[float, str]:
     except (json.JSONDecodeError, ValueError):
         pass
 
-    # Fallback: look for a number
-    import re
     match = re.search(r"(\d+\.?\d*)", response_text)
     if match:
         score = float(match.group(1))
@@ -284,30 +272,24 @@ def _parse_llm_score(response_text: str) -> tuple[float, str]:
 def _normalize_text(text: str) -> str:
     """Normalize text: lowercase, strip accents, collapse whitespace."""
     text = text.lower()
-    # Remove accents (é→e, è→e, etc.)
     text = unicodedata.normalize("NFD", text)
     text = "".join(c for c in text if unicodedata.category(c) != "Mn")
     return text
 
 
 def compute_keyword_ratio(text: str, keywords: list[str]) -> float:
-    """Compute the fraction of *keywords* found in *text*.
-
-    Uses accent-normalized, case-insensitive matching with partial stem support.
-    """
+    """Compute the fraction of *keywords* found in *text*."""
     if not keywords:
         return 1.0
     text_norm = _normalize_text(text)
     hits = 0
     for kw in keywords:
         kw_norm = _normalize_text(kw)
-        # Exact match first
         if kw_norm in text_norm:
             hits += 1
             continue
-        # Partial stem match: if keyword >= 5 chars, try prefix (min 4 chars)
         if len(kw_norm) >= 5 and kw_norm[:4] in text_norm:
-            hits += 0.5  # partial credit
+            hits += 0.5
     return hits / len(keywords)
 
 
@@ -336,17 +318,14 @@ def evaluate_retrieval(
     if not docs:
         return RetrievalMetrics()
 
-    # Subject match
     subject_matches = sum(
         1 for d in docs
         if d.metadata.get("matiere", "").lower() == expected_subject.lower()
     )
 
-    # Keyword hits across all docs (use improved matching)
     all_text = " ".join(d.page_content for d in docs)
     keyword_hits = compute_keyword_ratio(all_text, expected_keywords)
 
-    # Unique sources
     unique_files = {d.metadata.get("filename", "") for d in docs}
 
     return RetrievalMetrics(
@@ -370,16 +349,13 @@ def evaluate_answer(
     """Compute answer-quality metrics using LLM-as-judge, keywords, and semantic similarity."""
     metrics = AnswerMetrics(answer_length=len(generated_answer))
 
-    # Keyword coverage (improved with accent normalization)
     metrics.keyword_coverage = compute_keyword_ratio(generated_answer, keywords)
 
-    # Semantic similarity between expected and generated answers
     if embeddings is not None:
         metrics.semantic_similarity = compute_semantic_similarity(
             expected_answer, generated_answer, embeddings,
         )
 
-    # LLM-as-judge: faithfulness
     try:
         faith_msgs = FAITHFULNESS_PROMPT.invoke({
             "question": question,
@@ -391,7 +367,6 @@ def evaluate_answer(
     except Exception:
         metrics.faithfulness_score = 0.0
 
-    # LLM-as-judge: relevance
     try:
         rel_msgs = RELEVANCE_PROMPT.invoke({
             "question": question,
@@ -402,7 +377,6 @@ def evaluate_answer(
     except Exception:
         metrics.relevance_score = 0.0
 
-    # LLM-as-judge: completeness
     try:
         comp_msgs = COMPLETENESS_PROMPT.invoke({
             "question": question,
@@ -430,55 +404,29 @@ def run_evaluation(
     bm25_index=None,
     enable_enhanced: bool = True,
 ) -> EvalSummary:
-    """Run the full evaluation pipeline on the given dataset.
-
-    Parameters
-    ----------
-    vectorstore : Chroma
-        The indexed vector store.
-    llm : ChatOpenAI
-        The LLM used for RAG responses and LLM-as-judge scoring.
-    dataset : list, optional
-        List of evaluation items. Defaults to ``EVAL_DATASET``.
-    nb_sources : int
-        Number of documents to retrieve per query.
-    progress_callback : callable, optional
-        Called with ``(current_index, total, question_text)`` for progress tracking.
-    bm25_index : optional
-        BM25Index for hybrid search. If None, hybrid search is disabled.
-    enable_enhanced : bool
-        Use enhanced retrieval pipeline (rewrite + hybrid). Default True.
-
-    Returns
-    -------
-    EvalSummary
-        Aggregated results and per-question details.
-    """
-    from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+    """Run the full evaluation pipeline on the given dataset."""
+    from langchain_core.prompts import ChatPromptTemplate as CPT
 
     if dataset is None:
         dataset = EVAL_DATASET
 
-    # Import enhanced retrieval if available
     enhanced_retrieve = None
     if enable_enhanced:
         try:
-            from rag_improvements import enhanced_retrieve as _er
+            from core.retrieval import enhanced_retrieve as _er
             enhanced_retrieve = _er
         except ImportError:
             pass
 
-    # Separate judge LLM with temperature=0 for consistent scoring
     judge_llm = ChatOpenAI(
         model="gpt-4o-mini",
         temperature=0.0,
-        openai_api_key=os.getenv("OPENAI_api_key"),
+        openai_api_key=OPENAI_API_KEY,
     )
 
-    # Embeddings for semantic similarity
     eval_embeddings = OpenAIEmbeddings(
         model="text-embedding-3-small",
-        openai_api_key=os.getenv("OPENAI_api_key"),
+        openai_api_key=OPENAI_API_KEY,
     )
 
     EVAL_SYSTEM_PROMPT = """\
@@ -498,7 +446,7 @@ Regles :
 Contexte des cours :
 {context}
 """
-    eval_prompt = ChatPromptTemplate.from_messages([
+    eval_prompt = CPT.from_messages([
         ("system", EVAL_SYSTEM_PROMPT),
         ("human", "{question}"),
     ])
@@ -516,7 +464,6 @@ Contexte des cours :
 
         start = time.time()
 
-        # 1. Retrieve documents (enhanced or basic)
         if enhanced_retrieve is not None:
             retrieval_result = enhanced_retrieve(
                 question=question,
@@ -538,7 +485,6 @@ Contexte des cours :
             )
             docs = retriever.invoke(question)
 
-        # 2. Build context
         context_parts = []
         for doc in docs:
             matiere = doc.metadata.get("matiere", "Inconnu")
@@ -549,7 +495,6 @@ Contexte des cours :
             )
         context = "\n\n---\n\n".join(context_parts)
 
-        # 3. Generate answer
         messages = eval_prompt.invoke({
             "context": context,
             "question": question,
@@ -559,16 +504,13 @@ Contexte des cours :
 
         elapsed = time.time() - start
 
-        # 4. Evaluate retrieval
         ret_metrics = evaluate_retrieval(docs, subject, keywords)
 
-        # 5. Evaluate answer (using separate judge LLM with temp=0)
         ans_metrics = evaluate_answer(
             question, expected, generated, context, keywords, judge_llm,
             embeddings=eval_embeddings,
         )
 
-        # 6. Collect sources
         source_names = list({
             doc.metadata.get("filename", "") for doc in docs
         })
@@ -585,7 +527,6 @@ Contexte des cours :
         )
         results.append(result)
 
-    # Aggregate
     n = len(results)
     summary = EvalSummary(
         total_questions=n,
@@ -601,7 +542,6 @@ Contexte des cours :
         results=[asdict(r) for r in results],
     )
 
-    # Weighted overall score (rebalanced with semantic similarity)
     summary.overall_score = round(
         0.18 * summary.avg_faithfulness
         + 0.20 * summary.avg_relevance
@@ -617,13 +557,11 @@ Contexte des cours :
 
 
 def save_results(summary: EvalSummary, filename: str = "eval_latest.json") -> Path:
-    """Persist evaluation results to a JSON file + timestamped copy for history."""
+    """Persist evaluation results to a JSON file + timestamped copy."""
     EVAL_RESULTS_DIR.mkdir(exist_ok=True)
-    # Always save as latest
     filepath = EVAL_RESULTS_DIR / filename
     with open(filepath, "w", encoding="utf-8") as fh:
         json.dump(asdict(summary), fh, ensure_ascii=False, indent=2)
-    # Also save timestamped copy for history tracking
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     history_path = EVAL_RESULTS_DIR / f"eval_{ts}.json"
     with open(history_path, "w", encoding="utf-8") as fh:
@@ -632,7 +570,7 @@ def save_results(summary: EvalSummary, filename: str = "eval_latest.json") -> Pa
 
 
 def list_eval_history() -> list[dict]:
-    """List all past evaluation runs with their scores, sorted by date (newest first)."""
+    """List all past evaluation runs with their scores, sorted newest first."""
     if not EVAL_RESULTS_DIR.exists():
         return []
     history = []
@@ -663,9 +601,7 @@ def load_results(filename: str = "eval_latest.json") -> EvalSummary | None:
         return None
     with open(filepath, encoding="utf-8") as fh:
         data = json.load(fh)
-    return EvalSummary(**{
-        k: v for k, v in data.items()
-    })
+    return EvalSummary(**{k: v for k, v in data.items()})
 
 
 # ---------------------------------------------------------------------------
@@ -683,7 +619,7 @@ def main() -> None:
         return
 
     if not CHROMA_DIR.exists():
-        print("ERREUR: Base vectorielle introuvable. Lancez: python indexer.py")
+        print("ERREUR: Base vectorielle introuvable. Lancez: python -m scripts.index")
         return
 
     embeddings = OpenAIEmbeddings(
@@ -700,8 +636,7 @@ def main() -> None:
         openai_api_key=OPENAI_API_KEY,
     )
 
-    # Build BM25 index for enhanced retrieval
-    from rag_improvements import BM25Index
+    from core.retrieval import BM25Index
     print("Construction de l'index BM25...")
     all_docs = vectorstore.get(include=["documents", "metadatas"])
     bm25_index = BM25Index()
