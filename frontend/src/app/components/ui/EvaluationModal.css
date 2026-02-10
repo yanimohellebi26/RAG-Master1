@@ -1,0 +1,240 @@
+.evaluationmodal {
+  max-width: 900px;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  gap: 1.5rem;
+}
+
+.loading-state p {
+  color: var(--text-secondary);
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.metric-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.metric-card.metric-primary {
+  background: var(--primary-gradient);
+  border: none;
+  color: white;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Secondary Metrics */
+.secondary-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--surface-hover);
+  border-radius: var(--radius);
+}
+
+.metric-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.metric-item span:first-child {
+  color: var(--text-secondary);
+}
+
+.metric-item span:last-child {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Results Section */
+.eval-results-section {
+  margin-bottom: 2rem;
+}
+
+.eval-results-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.result-item {
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.result-item summary {
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  list-style: none;
+  user-select: none;
+  transition: var(--transition);
+}
+
+.result-item summary:hover {
+  background: var(--surface);
+}
+
+.result-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.result-details {
+  padding: 1rem;
+  background: var(--background);
+  border-top: 1px solid var(--border);
+}
+
+.result-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.metric-sm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric-sm span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-sm strong {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.result-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.result-text strong {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.result-text p {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.expected-answer {
+  background: rgba(59, 130, 246, 0.1);
+  border-left: 3px solid var(--info);
+  color: var(--text-primary);
+}
+
+.generated-answer {
+  background: rgba(34, 197, 94, 0.1);
+  border-left: 3px solid var(--success);
+  color: var(--text-primary);
+}
+
+/* History Section */
+.eval-history-section {
+  margin-bottom: 1rem;
+}
+
+.eval-history-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--surface-hover);
+  border-radius: var(--radius-sm);
+}
+
+.history-date {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.history-score {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .result-metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+  }
+}

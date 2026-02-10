@@ -71,15 +71,20 @@ try:
 except Exception as e:
     errors.append(f"Erreur tools/: {e}")
 
-# 5. Verifier ui/
-print("\n[5/6] Module ui/...")
+# 5. Verifier api/
+print("\n[5/6] Module api/...")
 try:
-    from ui.components import (
-        RENDERERS, format_docs, deduplicate_sources, APP_CSS,
-    )
-    print(f"   ui.components OK ({len(RENDERERS)} renderers)")
+    from api import create_app
+    from api.services.rag import rag_service
+    from api.blueprints.chat import chat_bp
+    from api.blueprints.copilot import copilot_bp
+    from api.blueprints.evaluation import eval_bp
+    from api.blueprints.config import config_bp
+    print(f"   api.create_app OK")
+    print(f"   api.services.rag OK")
+    print(f"   4 blueprints registered OK")
 except Exception as e:
-    errors.append(f"Erreur ui/: {e}")
+    errors.append(f"Erreur api/: {e}")
 
 # 6. Verifier les dependances
 print("\n[6/6] Dependances...")
@@ -117,7 +122,7 @@ elif warnings:
 else:
     print("\n TOUS LES MODULES VERIFIES")
     print("\nCommandes disponibles:")
-    print("  streamlit run app.py                    # Lancer l'app")
+    print("  python web_app.py                      # Lancer le serveur Flask")
     print("  python -m scripts.index                 # Indexer les cours")
     print("  python -m scripts.index -i              # Reindexation incrementale")
     print("  python -m scripts.index -w              # Mode surveillance")

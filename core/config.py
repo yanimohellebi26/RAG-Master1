@@ -26,7 +26,7 @@ CONFIG_PATH: Path = PROJECT_ROOT / "config.yaml"
 
 load_dotenv(PROJECT_ROOT / ".env")
 
-OPENAI_API_KEY: str | None = os.getenv("OPENAI_api_key")
+OPENAI_API_KEY: str | None = os.getenv("OPENAI_API_KEY")
 
 # ---------------------------------------------------------------------------
 # YAML config

@@ -11,6 +11,14 @@ import asyncio
 import traceback
 from typing import Any
 
+from core.constants import (
+    COPILOT_MAX_CONTENT_LENGTH,
+    COPILOT_SESSION_TIMEOUT,
+    COPILOT_DEFAULT_MODEL,
+    COPILOT_AVAILABLE_MODELS,
+    TOOL_LABELS,
+)
+
 # ---------------------------------------------------------------------------
 # Conditional SDK import
 # ---------------------------------------------------------------------------
@@ -23,28 +31,14 @@ except ImportError:
     COPILOT_SDK_AVAILABLE = False
 
 # ---------------------------------------------------------------------------
-# Constants
+# Constants (re-exported from core.constants for backward compatibility)
 # ---------------------------------------------------------------------------
 
-MAX_CONTENT_LENGTH: int = 6000
-SESSION_TIMEOUT: float = 60.0
-DEFAULT_MODEL: str = "gpt-4o"
-
-AVAILABLE_MODELS: list[str] = [
-    "gpt-4o",
-    "gpt-4o-mini",
-    "claude-sonnet-4",
-    "o3-mini",
-]
-
-TOOL_LABELS: dict[str, str] = {
-    "quiz": "Quiz",
-    "table": "Tableau",
-    "chart": "Graphique",
-    "concepts": "Concepts",
-    "flashcards": "Flashcards",
-    "mindmap": "Mind Map",
-}
+MAX_CONTENT_LENGTH = COPILOT_MAX_CONTENT_LENGTH
+SESSION_TIMEOUT = COPILOT_SESSION_TIMEOUT
+DEFAULT_MODEL = COPILOT_DEFAULT_MODEL
+AVAILABLE_MODELS = COPILOT_AVAILABLE_MODELS
+# TOOL_LABELS already imported from core.constants
 
 _SYSTEM_MESSAGE: dict[str, str] = {
     "mode": "replace",

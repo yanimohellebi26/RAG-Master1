@@ -22,6 +22,33 @@ from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 
 from core.config import OPENAI_API_KEY, CHROMA_DIR, EVAL_RESULTS_DIR
+from core.constants import (
+    LLM_MODEL,
+    LLM_JUDGE_TEMPERATURE,
+    EMBEDDING_MODEL,
+    META_MATIERE,
+    META_DOC_TYPE,
+    META_FILENAME,
+    DEFAULT_MATIERE,
+    DEFAULT_DOC_TYPE,
+    DEFAULT_NB_SOURCES,
+    FETCH_K_MULTIPLIER,
+    SEARCH_TYPE_MMR,
+    SYSTEM_PROMPT,
+    EVAL_WEIGHT_FAITHFULNESS,
+    EVAL_WEIGHT_RELEVANCE,
+    EVAL_WEIGHT_COMPLETENESS,
+    EVAL_WEIGHT_SEMANTIC_SIM,
+    EVAL_WEIGHT_KEYWORD_COV,
+    EVAL_WEIGHT_SUBJECT_MATCH,
+    EVAL_WEIGHT_KEYWORD_HIT,
+    EVAL_LATEST_FILENAME,
+    EVAL_HISTORY_GLOB,
+    EVAL_MAX_CONTEXT_LENGTH,
+    EVAL_MAX_ANSWER_LENGTH,
+    EVAL_MAX_ANSWER_JUDGE,
+    EVAL_MAX_EMBED_LENGTH,
+)
 
 # ---------------------------------------------------------------------------
 # Evaluation dataset -- ground-truth Q&A pairs per subject
@@ -300,7 +327,7 @@ def compute_semantic_similarity(
 ) -> float:
     """Compute cosine similarity between two texts using embeddings."""
     try:
-        vecs = embeddings.embed_documents([text_a[:2000], text_b[:2000]])
+        vecs = embeddings.embed_documents([text_a[:EVAL_MAX_EMBED_LENGTH], text_b[:EVAL_MAX_EMBED_LENGTH]])
         a = np.array(vecs[0])
         b = np.array(vecs[1])
         cos_sim = float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + 1e-10))
@@ -320,13 +347,13 @@ def evaluate_retrieval(
 
     subject_matches = sum(
         1 for d in docs
-        if d.metadata.get("matiere", "").lower() == expected_subject.lower()
+        if d.metadata.get(META_MATIERE, "").lower() == expected_subject.lower()
     )
 
     all_text = " ".join(d.page_content for d in docs)
     keyword_hits = compute_keyword_ratio(all_text, expected_keywords)
 
-    unique_files = {d.metadata.get("filename", "") for d in docs}
+    unique_files = {d.metadata.get(META_FILENAME, "") for d in docs}
 
     return RetrievalMetrics(
         num_docs_retrieved=len(docs),
@@ -359,8 +386,8 @@ def evaluate_answer(
     try:
         faith_msgs = FAITHFULNESS_PROMPT.invoke({
             "question": question,
-            "context": context[:10000],
-            "answer": generated_answer[:3000],
+            "context": context[:EVAL_MAX_CONTEXT_LENGTH],
+            "answer": generated_answer[:EVAL_MAX_ANSWER_LENGTH],
         })
         faith_resp = llm.invoke(faith_msgs)
         metrics.faithfulness_score, _ = _parse_llm_score(faith_resp.content)
@@ -370,7 +397,7 @@ def evaluate_answer(
     try:
         rel_msgs = RELEVANCE_PROMPT.invoke({
             "question": question,
-            "answer": generated_answer[:2000],
+            "answer": generated_answer[:EVAL_MAX_ANSWER_JUDGE],
         })
         rel_resp = llm.invoke(rel_msgs)
         metrics.relevance_score, _ = _parse_llm_score(rel_resp.content)
@@ -381,7 +408,7 @@ def evaluate_answer(
         comp_msgs = COMPLETENESS_PROMPT.invoke({
             "question": question,
             "expected": expected_answer,
-            "answer": generated_answer[:2000],
+            "answer": generated_answer[:EVAL_MAX_ANSWER_JUDGE],
         })
         comp_resp = llm.invoke(comp_msgs)
         metrics.completeness_score, _ = _parse_llm_score(comp_resp.content)
@@ -419,35 +446,18 @@ def run_evaluation(
             pass
 
     judge_llm = ChatOpenAI(
-        model="gpt-4o-mini",
-        temperature=0.0,
+        model=LLM_MODEL,
+        temperature=LLM_JUDGE_TEMPERATURE,
         openai_api_key=OPENAI_API_KEY,
     )
 
     eval_embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small",
+        model=EMBEDDING_MODEL,
         openai_api_key=OPENAI_API_KEY,
     )
 
-    EVAL_SYSTEM_PROMPT = """\
-Tu es un assistant pedagogique expert pour un etudiant en Master 1 Informatique.
-Tu reponds en francais de maniere claire, structuree et pedagogique.
-
-Regles :
-1. Base tes reponses PRINCIPALEMENT sur le contexte fourni (extraits de cours).
-   Cite la source (matiere, type) pour chaque information issue du contexte.
-2. Tu peux completer avec des connaissances generales en informatique si elles
-   sont coherentes avec le contexte. Precise alors : "De maniere generale, ..."
-3. Si le contexte ne contient pas d'information sur le sujet, dis-le clairement.
-4. Utilise des exemples et des explications simples.
-5. Structure tes reponses avec des titres, listes a puces, etc.
-6. Si on te demande un exercice, guide l'etudiant etape par etape.
-
-Contexte des cours :
-{context}
-"""
     eval_prompt = CPT.from_messages([
-        ("system", EVAL_SYSTEM_PROMPT),
+        ("system", SYSTEM_PROMPT),
         ("human", "{question}"),
     ])
 
@@ -478,18 +488,18 @@ Contexte des cours :
             )
             docs = retrieval_result["documents"]
         else:
-            search_kwargs = {"k": nb_sources, "fetch_k": nb_sources * 3}
+            search_kwargs = {"k": nb_sources, "fetch_k": nb_sources * FETCH_K_MULTIPLIER}
             retriever = vectorstore.as_retriever(
-                search_type="mmr",
+                search_type=SEARCH_TYPE_MMR,
                 search_kwargs=search_kwargs,
             )
             docs = retriever.invoke(question)
 
         context_parts = []
         for doc in docs:
-            matiere = doc.metadata.get("matiere", "Inconnu")
-            doc_type = doc.metadata.get("doc_type", "Document")
-            filename = doc.metadata.get("filename", "")
+            matiere = doc.metadata.get(META_MATIERE, DEFAULT_MATIERE)
+            doc_type = doc.metadata.get(META_DOC_TYPE, DEFAULT_DOC_TYPE)
+            filename = doc.metadata.get(META_FILENAME, "")
             context_parts.append(
                 f"[{matiere} -- {doc_type} -- {filename}]\n{doc.page_content}"
             )
@@ -512,7 +522,7 @@ Contexte des cours :
         )
 
         source_names = list({
-            doc.metadata.get("filename", "") for doc in docs
+            doc.metadata.get(META_FILENAME, "") for doc in docs
         })
 
         result = SingleEvalResult(
@@ -543,20 +553,20 @@ Contexte des cours :
     )
 
     summary.overall_score = round(
-        0.18 * summary.avg_faithfulness
-        + 0.20 * summary.avg_relevance
-        + 0.20 * summary.avg_completeness
-        + 0.15 * summary.avg_semantic_similarity
-        + 0.12 * summary.avg_keyword_coverage
-        + 0.10 * summary.avg_subject_match
-        + 0.05 * summary.avg_keyword_hit,
+        EVAL_WEIGHT_FAITHFULNESS * summary.avg_faithfulness
+        + EVAL_WEIGHT_RELEVANCE * summary.avg_relevance
+        + EVAL_WEIGHT_COMPLETENESS * summary.avg_completeness
+        + EVAL_WEIGHT_SEMANTIC_SIM * summary.avg_semantic_similarity
+        + EVAL_WEIGHT_KEYWORD_COV * summary.avg_keyword_coverage
+        + EVAL_WEIGHT_SUBJECT_MATCH * summary.avg_subject_match
+        + EVAL_WEIGHT_KEYWORD_HIT * summary.avg_keyword_hit,
         4,
     )
 
     return summary
 
 
-def save_results(summary: EvalSummary, filename: str = "eval_latest.json") -> Path:
+def save_results(summary: EvalSummary, filename: str = EVAL_LATEST_FILENAME) -> Path:
     """Persist evaluation results to a JSON file + timestamped copy."""
     EVAL_RESULTS_DIR.mkdir(exist_ok=True)
     filepath = EVAL_RESULTS_DIR / filename
@@ -574,7 +584,7 @@ def list_eval_history() -> list[dict]:
     if not EVAL_RESULTS_DIR.exists():
         return []
     history = []
-    for fp in sorted(EVAL_RESULTS_DIR.glob("eval_2*.json"), reverse=True):
+    for fp in sorted(EVAL_RESULTS_DIR.glob(EVAL_HISTORY_GLOB), reverse=True):
         try:
             with open(fp, encoding="utf-8") as fh:
                 data = json.load(fh)
@@ -594,7 +604,7 @@ def list_eval_history() -> list[dict]:
     return history
 
 
-def load_results(filename: str = "eval_latest.json") -> EvalSummary | None:
+def load_results(filename: str = EVAL_LATEST_FILENAME) -> EvalSummary | None:
     """Load previously saved evaluation results."""
     filepath = EVAL_RESULTS_DIR / filename
     if not filepath.exists():
@@ -623,7 +633,7 @@ def main() -> None:
         return
 
     embeddings = OpenAIEmbeddings(
-        model="text-embedding-3-small",
+        model=EMBEDDING_MODEL,
         openai_api_key=OPENAI_API_KEY,
     )
     vectorstore = Chroma(
@@ -631,8 +641,8 @@ def main() -> None:
         embedding_function=embeddings,
     )
     judge_llm = ChatOpenAI(
-        model="gpt-4o-mini",
-        temperature=0.0,
+        model=LLM_MODEL,
+        temperature=LLM_JUDGE_TEMPERATURE,
         openai_api_key=OPENAI_API_KEY,
     )
 

@@ -1,6 +1,4 @@
-"""Core RAG engine -- indexation, retrieval, configuration."""
-
-"""Core RAG engine -- indexation, retrieval, config, watcher."""
+"""Core RAG engine -- indexation, retrieval, configuration, constants."""
 
 from core.config import (
     PROJECT_ROOT,

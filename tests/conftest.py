@@ -15,7 +15,7 @@ from langchain_core.documents import Document
 
 load_dotenv()
 
-OPENAI_API_KEY = os.getenv("OPENAI_api_key")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 
 @pytest.fixture

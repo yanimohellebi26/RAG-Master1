@@ -36,6 +36,23 @@ from core.config import (
     SUBJECT_NAMES,
     EMBEDDING_MODEL,
 )
+from core.constants import (
+    META_MATIERE,
+    META_DOC_TYPE,
+    META_FILENAME,
+    META_FILEPATH,
+    META_FILE_HASH,
+    DOC_TYPE_CM,
+    DOC_TYPE_TD,
+    DOC_TYPE_TP,
+    DOC_TYPE_EXAM,
+    DOC_TYPE_CORRECTION,
+    CM_KEYWORDS,
+    EXAM_KEYWORDS,
+    CORRECTION_KEYWORDS,
+    DEFAULT_DOC_TYPE,
+    FILE_HASH_CHUNK_SIZE,
+)
 
 # ---------------------------------------------------------------------------
 # Startup check
@@ -44,13 +61,7 @@ from core.config import (
 if not OPENAI_API_KEY:
     sys.exit("Cle API OpenAI introuvable dans .env")
 
-# Filename keywords -> document type classification
-_CM_KEYWORDS: tuple[str, ...] = (
-    "cm", "cours", "slide",
-    "ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7",
-)
-_EXAM_KEYWORDS: tuple[str, ...] = ("exam", "ct ", "ct_", "cc_", "annale")
-_CORRECTION_KEYWORDS: tuple[str, ...] = ("corr", "cor", "solution")
+# Filename keywords -> document type classification (from constants)
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -62,7 +73,7 @@ def compute_file_hash(filepath: str) -> str:
     md5_hash = hashlib.md5()
     try:
         with open(filepath, "rb") as f:
-            for chunk in iter(lambda: f.read(8192), b""):
+            for chunk in iter(lambda: f.read(FILE_HASH_CHUNK_SIZE), b""):
                 md5_hash.update(chunk)
         return md5_hash.hexdigest()
     except Exception:
@@ -90,8 +101,8 @@ def get_existing_file_hashes(vectorstore) -> dict[str, str]:
 
         file_hashes = {}
         for meta in all_docs["metadatas"]:
-            if meta and "filepath" in meta and "file_hash" in meta:
-                file_hashes[meta["filepath"]] = meta["file_hash"]
+            if meta and META_FILEPATH in meta and META_FILE_HASH in meta:
+                file_hashes[meta[META_FILEPATH]] = meta[META_FILE_HASH]
 
         return file_hashes
     except Exception:
@@ -108,17 +119,17 @@ def get_subject(filepath: str) -> str:
 def get_doc_type(filename: str) -> str:
     """Classify a document by its filename into CM, TD, TP, Examen, etc."""
     lower = filename.lower()
-    if any(kw in lower for kw in _CM_KEYWORDS):
-        return "CM"
+    if any(kw in lower for kw in CM_KEYWORDS):
+        return DOC_TYPE_CM
     if "td" in lower:
-        return "TD"
+        return DOC_TYPE_TD
     if "tp" in lower:
-        return "TP"
-    if any(kw in lower for kw in _EXAM_KEYWORDS):
-        return "Examen"
-    if any(kw in lower for kw in _CORRECTION_KEYWORDS):
-        return "Corrige"
-    return "Document"
+        return DOC_TYPE_TP
+    if any(kw in lower for kw in EXAM_KEYWORDS):
+        return DOC_TYPE_EXAM
+    if any(kw in lower for kw in CORRECTION_KEYWORDS):
+        return DOC_TYPE_CORRECTION
+    return DEFAULT_DOC_TYPE
 
 
 def load_all_documents(
@@ -140,6 +151,9 @@ def load_all_documents(
     docs: list = []
     filepaths_processed: set[str] = set()
     filepaths_all_current: set[str] = set()
+    
+    total_files = 0
+    skipped_files = 0
 
     for root, _, files in os.walk(COURSES_DIR):
         for filename in sorted(files):
@@ -147,9 +161,11 @@ def load_all_documents(
             if ext not in SUPPORTED_EXTENSIONS:
                 continue
 
+            total_files += 1
             filepath = os.path.join(root, filename)
 
             if should_exclude_path(filepath, COURSES_DIR):
+                skipped_files += 1
                 continue
 
             filepaths_all_current.add(filepath)
@@ -185,13 +201,13 @@ def load_all_documents(
                         if len(line.strip()) > MIN_LINE_LENGTH
                     ]
                     doc.page_content = "\n".join(lines)
-                    doc.metadata.update(
-                        matiere=subject,
-                        doc_type=doc_type,
-                        filename=filename,
-                        filepath=filepath,
-                        file_hash=current_hash,
-                    )
+                    doc.metadata.update({
+                        META_MATIERE: subject,
+                        META_DOC_TYPE: doc_type,
+                        META_FILENAME: filename,
+                        META_FILEPATH: filepath,
+                        META_FILE_HASH: current_hash,
+                    })
 
                 docs.extend(
                     doc for doc in loaded
@@ -201,6 +217,9 @@ def load_all_documents(
             except Exception as exc:
                 print(f"  [ERREUR] {filename}: {exc}")
 
+    if total_files > 0:
+        print(f"  Total de fichiers trouves: {total_files}, Exclus: {skipped_files}, Charges: {len(filepaths_processed)}")
+    
     return docs, filepaths_processed, filepaths_all_current
 
 
@@ -220,7 +239,7 @@ def delete_documents_by_filepath(vectorstore, filepaths: set[str]) -> int:
 
         ids_to_delete = []
         for doc_id, meta in zip(all_docs["ids"], all_docs["metadatas"]):
-            if meta and meta.get("filepath") in filepaths:
+            if meta and meta.get(META_FILEPATH) in filepaths:
                 ids_to_delete.append(doc_id)
 
         if ids_to_delete:
@@ -352,14 +371,14 @@ def main(incremental: bool = False, force_full: bool = False) -> None:
         all_docs = vectorstore.get(include=["metadatas"])
         if all_docs and all_docs.get("metadatas"):
             subject_counts = Counter(
-                meta.get("matiere", "Inconnu")
+                meta.get(META_MATIERE, DEFAULT_DOC_TYPE)
                 for meta in all_docs["metadatas"]
                 if meta
             )
             for subject, count in sorted(subject_counts.items()):
                 print(f"   - {subject}: {count}")
     except Exception:
-        subject_counts = Counter(ch.metadata["matiere"] for ch in chunks)
+        subject_counts = Counter(ch.metadata[META_MATIERE] for ch in chunks)
         for subject, count in sorted(subject_counts.items()):
             print(f"   - {subject}: {count}")
 

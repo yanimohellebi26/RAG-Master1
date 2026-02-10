@@ -14,12 +14,12 @@ from pathlib import Path
 
 from langchain_core.documents import Document
 
-OPENAI_API_KEY = os.getenv("OPENAI_api_key")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Skip all tests if no API key
 pytestmark = pytest.mark.skipif(
     not OPENAI_API_KEY,
-    reason="OPENAI_api_key not found in environment",
+    reason="OPENAI_API_KEY not found in environment",
 )
 
 
