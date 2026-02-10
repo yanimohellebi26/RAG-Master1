@@ -1,0 +1,121 @@
+/* IndexVideoButton — discreet inline index button */
+
+.index-video-btn-wrapper {
+  position: relative;
+  display: inline-flex;
+  z-index: 5;
+}
+
+.index-video-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-size: 0.72rem;
+  background: rgba(0, 0, 0, 0.55);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  padding: 0;
+  line-height: 1;
+  backdrop-filter: blur(4px);
+  color: #fff;
+}
+
+.index-video-btn:hover:not(:disabled) {
+  background: rgba(102, 126, 234, 0.85);
+  transform: scale(1.1);
+}
+
+.index-video-btn--done {
+  background: rgba(16, 185, 129, 0.75) !important;
+  cursor: default;
+}
+
+.index-video-btn--error {
+  background: rgba(239, 68, 68, 0.75) !important;
+}
+
+.index-video-btn--loading {
+  cursor: wait;
+}
+
+.spinner-tiny {
+  width: 0.7rem;
+  height: 0.7rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Picker popover */
+.index-video-picker {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.5rem;
+  background: var(--surface, #1e1e2e);
+  border: 1px solid var(--border, #333);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+  z-index: 50;
+  animation: picker-in 0.15s ease-out;
+}
+
+@keyframes picker-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.index-video-picker-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary, #aaa);
+}
+
+.index-video-picker-select {
+  padding: 0.2rem 0.35rem;
+  background: var(--background, #111);
+  border: 1px solid var(--border, #444);
+  border-radius: 4px;
+  color: var(--text-primary, #eee);
+  font-size: 0.75rem;
+  max-width: 140px;
+}
+
+.index-video-picker-select:focus {
+  outline: none;
+  border-color: var(--accent, #667eea);
+}
+
+.index-video-picker-go {
+  padding: 0.2rem 0.5rem;
+  background: var(--accent, #667eea);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.index-video-picker-go:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.index-video-picker-go:hover:not(:disabled) {
+  opacity: 0.85;
+}

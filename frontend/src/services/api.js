@@ -115,6 +115,22 @@ export function searchYouTubeVideos(payload) {
   return post('/youtube/search', payload)
 }
 
+export function fetchYouTubeHistory(subject) {
+  const qs = subject ? `?subject=${encodeURIComponent(subject)}` : ''
+  return get(`/youtube/history${qs}`)
+}
+
+export async function deleteYouTubeVideo(videoId) {
+  const res = await fetch(`${BASE}/youtube/history/${encodeURIComponent(videoId)}`, {
+    method: 'DELETE',
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }))
+    throw new Error(err.error || res.statusText)
+  }
+  return res.json()
+}
+
 /**
  * Stream an AI analysis of a YouTube video via SSE.
  * Returns a ReadableStream reader for the caller to consume.

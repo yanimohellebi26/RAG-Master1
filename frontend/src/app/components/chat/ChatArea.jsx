@@ -3,6 +3,7 @@ import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import hljs from 'highlight.js'
 import { useChat } from '../../../contexts/ChatContext'
+import IndexVideoButton from '../ui/IndexVideoButton'
 import './ChatArea.css'
 import 'highlight.js/styles/github-dark.css'
 
@@ -128,26 +129,30 @@ export default function ChatArea({ onOpenCopilot }) {
                           <h4 className="chat-video-header">🎥 Vidéos trouvées pour : <em>{message.videos.concept}</em></h4>
                           <div className="chat-video-grid">
                             {message.videos.videos.map((video, vidx) => (
-                              <a
-                                key={vidx}
-                                href={video.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="chat-video-card"
-                              >
-                                <div className="chat-video-thumb">
-                                  {video.thumbnail ? (
-                                    <img src={video.thumbnail} alt={video.title} loading="lazy" />
-                                  ) : (
-                                    <span className="chat-video-play">▶</span>
-                                  )}
-                                  {video.duration && <span className="chat-video-duration">{video.duration}</span>}
-                                </div>
-                                <div className="chat-video-info">
-                                  <span className="chat-video-title">{video.title}</span>
-                                  <span className="chat-video-channel">{video.channel}</span>
-                                </div>
-                              </a>
+                              <div key={vidx} className="chat-video-card-wrapper">
+                                <a
+                                  href={video.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="chat-video-card"
+                                >
+                                  <div className="chat-video-thumb">
+                                    {video.thumbnail ? (
+                                      <img src={video.thumbnail} alt={video.title} loading="lazy" />
+                                    ) : (
+                                      <span className="chat-video-play">▶</span>
+                                    )}
+                                    {video.duration && <span className="chat-video-duration">{video.duration}</span>}
+                                  </div>
+                                  <div className="chat-video-info">
+                                    <span className="chat-video-title">{video.title}</span>
+                                    <span className="chat-video-channel">{video.channel}</span>
+                                  </div>
+                                </a>
+                                <span className="chat-video-index-btn">
+                                  <IndexVideoButton videoUrl={video.url} />
+                                </span>
+                              </div>
                             ))}
                           </div>
                           {message.videos.queries && message.videos.queries.length > 0 && (

@@ -273,39 +273,61 @@ class YouTubeService:
         from api.services.rag import rag_service
         from core.constants import META_MATIERE, META_DOC_TYPE, META_FILENAME, META_FILEPATH
 
-        store = rag_service.vectorstore
-        result = store.get(include=["metadatas"])
+        collection = rag_service.vectorstore._collection
 
-        if not result or not result.get("metadatas"):
+        # Build a where filter to avoid fetching the entire collection
+        if subject:
+            where_filter = {
+                "$and": [
+                    {"source_type": {"$eq": "youtube"}},
+                    {META_MATIERE: {"$eq": subject}},
+                ]
+            }
+        else:
+            where_filter = {"source_type": {"$eq": "youtube"}}
+
+        # Fetch only YouTube docs (batched to avoid SQLite variable limit)
+        all_metadatas: list[dict] = []
+        batch_size = 500
+        offset = 0
+        while True:
+            batch = collection.get(
+                where=where_filter,
+                include=["metadatas"],
+                limit=batch_size,
+                offset=offset,
+            )
+            metas = batch.get("metadatas") or []
+            if not metas:
+                break
+            all_metadatas.extend(metas)
+            if len(metas) < batch_size:
+                break
+            offset += batch_size
+
+        if not all_metadatas:
             return []
 
         # Group by video_id
         videos: dict[str, dict[str, Any]] = {}
-        for meta in result["metadatas"]:
-            if not meta or meta.get("source_type") != "youtube":
-                continue
-
+        for meta in all_metadatas:
             vid = meta.get("video_id", "")
             if not vid:
-                continue
-
-            vid_subject = meta.get(META_MATIERE, "")
-            if subject and vid_subject != subject:
                 continue
 
             if vid not in videos:
                 videos[vid] = {
                     "video_id": vid,
                     "url": meta.get(META_FILEPATH, f"https://youtube.com/watch?v={vid}"),
-                    "subject": vid_subject,
+                    "subject": meta.get(META_MATIERE, ""),
                     "doc_type": meta.get(META_DOC_TYPE, "Video"),
                     "language": meta.get("language", ""),
                     "duration_seconds": meta.get("duration_seconds", 0),
                     "filename": meta.get(META_FILENAME, ""),
-                    "chunks": 0,
+                    "chunks_count": 0,
                     "thumbnail": f"https://img.youtube.com/vi/{vid}/mqdefault.jpg",
                 }
-            videos[vid]["chunks"] += 1
+            videos[vid]["chunks_count"] += 1
 
         return sorted(videos.values(), key=lambda v: v["video_id"])
 
@@ -313,22 +335,45 @@ class YouTubeService:
         """Remove all chunks for a given video_id from ChromaDB."""
         from api.services.rag import rag_service
 
-        store = rag_service.vectorstore
-        result = store.get(include=["metadatas"])
+        collection = rag_service.vectorstore._collection
 
-        if not result or not result.get("ids"):
-            return {"deleted": 0, "video_id": video_id}
+        where_filter = {
+            "$and": [
+                {"source_type": {"$eq": "youtube"}},
+                {"video_id": {"$eq": video_id}},
+            ]
+        }
 
-        ids_to_delete = []
-        for doc_id, meta in zip(result["ids"], result["metadatas"]):
-            if meta and meta.get("source_type") == "youtube" and meta.get("video_id") == video_id:
-                ids_to_delete.append(doc_id)
+        # Collect IDs in batches to avoid SQLite variable limit
+        ids_to_delete: list[str] = []
+        batch_size = 500
+        offset = 0
+        while True:
+            batch = collection.get(
+                where=where_filter,
+                include=[],
+                limit=batch_size,
+                offset=offset,
+            )
+            ids = batch.get("ids") or []
+            if not ids:
+                break
+            ids_to_delete.extend(ids)
+            if len(ids) < batch_size:
+                break
+            offset += batch_size
 
-        if ids_to_delete:
-            store.delete(ids=ids_to_delete)
+        # Delete in batches
+        total = 0
+        for i in range(0, len(ids_to_delete), batch_size):
+            chunk = ids_to_delete[i : i + batch_size]
+            collection.delete(ids=chunk)
+            total += len(chunk)
+
+        if total:
             rag_service._bm25_index = None  # Invalidate BM25 cache
 
-        return {"deleted": len(ids_to_delete), "video_id": video_id}
+        return {"deleted": total, "video_id": video_id}
 
     def search_videos(
         self,

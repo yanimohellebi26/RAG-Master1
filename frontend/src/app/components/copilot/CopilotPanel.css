@@ -571,3 +571,22 @@
   color: #fff;
   border-color: var(--accent);
 }
+
+/* Index video button on thumbnails */
+.video-card-wrapper {
+  position: relative;
+}
+
+.copilot-video-index-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: auto;
+}
+
+.video-card-wrapper:hover .copilot-video-index-btn {
+  opacity: 1;
+}

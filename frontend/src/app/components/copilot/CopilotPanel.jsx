@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { generateCopilotTool, searchYouTubeVideos } from '../../../services/api'
+import IndexVideoButton from '../ui/IndexVideoButton'
 import './CopilotPanel.css'
 
 export default function CopilotPanel({ config, messages, context, model, onClose }) {
@@ -271,31 +272,35 @@ function VideoRenderer({ data }) {
       {data.videos && data.videos.length > 0 ? (
         <div className="video-grid">
           {data.videos.map((video, idx) => (
-            <a
-              key={idx}
-              href={video.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="video-card"
-            >
-              <div className="video-thumbnail">
-                {video.thumbnail ? (
-                  <img src={video.thumbnail} alt={video.title} loading="lazy" />
-                ) : (
-                  <div className="video-thumb-placeholder">▶</div>
-                )}
-                {video.duration && (
-                  <span className="video-duration">{video.duration}</span>
-                )}
-              </div>
-              <div className="video-info">
-                <h5 className="video-title">{video.title}</h5>
-                <span className="video-channel">{video.channel}</span>
-                {video.views && (
-                  <span className="video-views">{video.views}</span>
-                )}
-              </div>
-            </a>
+            <div key={idx} className="video-card-wrapper">
+              <a
+                href={video.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="video-card"
+              >
+                <div className="video-thumbnail">
+                  {video.thumbnail ? (
+                    <img src={video.thumbnail} alt={video.title} loading="lazy" />
+                  ) : (
+                    <div className="video-thumb-placeholder">▶</div>
+                  )}
+                  {video.duration && (
+                    <span className="video-duration">{video.duration}</span>
+                  )}
+                </div>
+                <div className="video-info">
+                  <h5 className="video-title">{video.title}</h5>
+                  <span className="video-channel">{video.channel}</span>
+                  {video.views && (
+                    <span className="video-views">{video.views}</span>
+                  )}
+                </div>
+              </a>
+              <span className="copilot-video-index-btn">
+                <IndexVideoButton videoUrl={video.url} />
+              </span>
+            </div>
           ))}
         </div>
       ) : (

@@ -6,7 +6,7 @@
  *   2. Indexation : coller un lien + choisir matiere → indexer dans ChromaDB
  */
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import { useApp } from '../contexts/AppContext'
@@ -15,6 +15,8 @@ import {
   fetchYouTubeTranscript,
   indexYouTubeTranscript,
   analyzeYouTubeStream,
+  fetchYouTubeHistory,
+  deleteYouTubeVideo,
 } from '../services/api'
 import './YouTubePage.css'
 
@@ -33,7 +35,7 @@ export default function YouTubePage() {
   const { config } = useApp()
 
   const [url, setUrl] = useState('')
-  const [mode, setMode] = useState('analyze') // 'analyze' | 'index'
+  const [mode, setMode] = useState('analyze') // 'analyze' | 'index' | 'transcript' | 'history'
   const [analysisType, setAnalysisType] = useState('summary')
   const [subject, setSubject] = useState('')
   const [docType, setDocType] = useState('Video')
@@ -45,6 +47,13 @@ export default function YouTubePage() {
   const [indexResult, setIndexResult] = useState(null)
   const [error, setError] = useState('')
   const [streaming, setStreaming] = useState(false)
+
+  // History state
+  const [history, setHistory] = useState([])
+  const [historyLoading, setHistoryLoading] = useState(false)
+  const [historyFilter, setHistoryFilter] = useState('')
+  const [historySearch, setHistorySearch] = useState('')
+  const [deletingId, setDeletingId] = useState(null)
 
   const analysisEndRef = useRef(null)
 
@@ -61,6 +70,50 @@ export default function YouTubePage() {
       analysisEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
   }, [analysis, streaming])
+
+  // Load history when switching to history tab
+  const loadHistory = useCallback(async () => {
+    setHistoryLoading(true)
+    try {
+      const data = await fetchYouTubeHistory(historyFilter || undefined)
+      setHistory(data.videos || [])
+    } catch (err) {
+      setError(err.message || 'Erreur lors du chargement de l\'historique')
+    } finally {
+      setHistoryLoading(false)
+    }
+  }, [historyFilter])
+
+  useEffect(() => {
+    if (mode === 'history') {
+      loadHistory()
+    }
+  }, [mode, loadHistory])
+
+  const handleDelete = async (videoId) => {
+    if (deletingId) return
+    setDeletingId(videoId)
+    try {
+      await deleteYouTubeVideo(videoId)
+      setHistory(prev => prev.filter(v => v.video_id !== videoId))
+    } catch (err) {
+      setError(err.message || 'Erreur lors de la suppression')
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  // Filtered history based on search text
+  const filteredHistory = history.filter(v => {
+    if (!historySearch) return true
+    const q = historySearch.toLowerCase()
+    return (
+      (v.video_id || '').toLowerCase().includes(q) ||
+      (v.title || '').toLowerCase().includes(q) ||
+      (v.subject || '').toLowerCase().includes(q) ||
+      (v.doc_type || '').toLowerCase().includes(q)
+    )
+  })
 
   const reset = () => {
     setTranscript(null)
@@ -146,6 +199,8 @@ export default function YouTubePage() {
         doc_type: docType,
       })
       setIndexResult(data)
+      // Refresh history cache so the badge updates
+      fetchYouTubeHistory().then(h => setHistory(h.videos || [])).catch(() => {})
     } catch (err) {
       setError(err.message || 'Erreur lors de l\'indexation')
     } finally {
@@ -214,6 +269,13 @@ export default function YouTubePage() {
             onClick={() => setMode('transcript')}
           >
             📝 Transcription brute
+          </button>
+          <button
+            className={`yt-mode-tab ${mode === 'history' ? 'active' : ''}`}
+            onClick={() => setMode('history')}
+          >
+            📚 Historique
+            {history.length > 0 && <span className="yt-tab-badge">{history.length}</span>}
           </button>
         </div>
 
@@ -297,6 +359,43 @@ export default function YouTubePage() {
               disabled={!url.trim() || loading}
             >
               {loading ? <><span className="spinner" /> Récupération...</> : '📝 Récupérer la transcription'}
+            </button>
+          </div>
+        )}
+
+        {mode === 'history' && (
+          <div className="yt-options yt-history-controls">
+            <div className="yt-option-row">
+              <div className="yt-option-group">
+                <label>Filtrer par matière</label>
+                <select
+                  value={historyFilter}
+                  onChange={(e) => setHistoryFilter(e.target.value)}
+                  className="select-input"
+                >
+                  <option value="">Toutes les matières</option>
+                  {subjects.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="yt-option-group yt-search-group">
+                <label>Rechercher</label>
+                <input
+                  type="text"
+                  className="yt-search-input"
+                  placeholder="Rechercher par titre, ID, matière..."
+                  value={historySearch}
+                  onChange={(e) => setHistorySearch(e.target.value)}
+                />
+              </div>
+            </div>
+            <button
+              className="btn btn-secondary"
+              onClick={loadHistory}
+              disabled={historyLoading}
+            >
+              {historyLoading ? <><span className="spinner" /> Chargement...</> : '🔄 Actualiser'}
             </button>
           </div>
         )}
@@ -423,10 +522,103 @@ export default function YouTubePage() {
             )}
           </div>
         )}
+
+        {/* History grid */}
+        {mode === 'history' && (
+          <div className="yt-history-section">
+            {historyLoading ? (
+              <div className="yt-history-loading">
+                <span className="spinner" />
+                <p>Chargement de l'historique...</p>
+              </div>
+            ) : filteredHistory.length === 0 ? (
+              <div className="yt-history-empty">
+                <div className="yt-empty-icon">📭</div>
+                <h3>{history.length === 0 ? 'Aucune vidéo indexée' : 'Aucun résultat'}</h3>
+                <p>
+                  {history.length === 0
+                    ? 'Indexez des vidéos YouTube via l\'onglet "Indexer" pour les retrouver ici.'
+                    : 'Essayez un autre filtre ou terme de recherche.'}
+                </p>
+              </div>
+            ) : (
+              <>
+                <div className="yt-history-header">
+                  <span className="yt-history-count">
+                    {filteredHistory.length} vidéo{filteredHistory.length > 1 ? 's' : ''} indexée{filteredHistory.length > 1 ? 's' : ''}
+                  </span>
+                </div>
+                <div className="yt-history-grid">
+                  {filteredHistory.map(video => (
+                    <div key={video.video_id} className="yt-history-card">
+                      <a
+                        href={`https://www.youtube.com/watch?v=${video.video_id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="yt-history-thumb-link"
+                      >
+                        <div className="yt-history-thumb">
+                          <img
+                            src={video.thumbnail || `https://img.youtube.com/vi/${video.video_id}/mqdefault.jpg`}
+                            alt={video.title || video.video_id}
+                            loading="lazy"
+                          />
+                          <div className="yt-history-play">▶</div>
+                          {video.duration && (
+                            <span className="yt-history-duration">{formatDuration(video.duration)}</span>
+                          )}
+                        </div>
+                      </a>
+                      <div className="yt-history-info">
+                        <h4 className="yt-history-title">
+                          {video.title || video.video_id}
+                        </h4>
+                        <div className="yt-history-tags">
+                          {video.subject && (
+                            <span className="yt-tag yt-tag-subject">{video.subject}</span>
+                          )}
+                          {video.doc_type && (
+                            <span className="yt-tag yt-tag-doctype">{video.doc_type}</span>
+                          )}
+                          {video.language && (
+                            <span className="yt-tag yt-tag-lang">{video.language}</span>
+                          )}
+                        </div>
+                        <div className="yt-history-meta">
+                          <span title="Chunks dans ChromaDB">📦 {video.chunks_count || 0} chunks</span>
+                          {video.indexed_at && (
+                            <span title="Date d'indexation">📅 {new Date(video.indexed_at).toLocaleDateString('fr-FR')}</span>
+                          )}
+                        </div>
+                        <div className="yt-history-actions">
+                          <a
+                            href={`https://www.youtube.com/watch?v=${video.video_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-secondary btn-sm"
+                          >
+                            ▶ YouTube
+                          </a>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => handleDelete(video.video_id)}
+                            disabled={deletingId === video.video_id}
+                          >
+                            {deletingId === video.video_id ? <span className="spinner" /> : '🗑️ Supprimer'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Empty state */}
-      {!transcript && !analysis && !indexResult && !error && !loading && (
+      {mode !== 'history' && !transcript && !analysis && !indexResult && !error && !loading && (
         <div className="yt-empty">
           <div className="yt-empty-icon">🎬</div>
           <h3>Collez un lien YouTube pour commencer</h3>

@@ -404,6 +404,24 @@
   margin-bottom: 0.75rem;
 }
 
+.chat-video-card-wrapper {
+  position: relative;
+}
+
+.chat-video-index-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: auto;
+}
+
+.chat-video-card-wrapper:hover .chat-video-index-btn {
+  opacity: 1;
+}
+
 .chat-video-card {
   display: flex;
   flex-direction: column;
@@ -427,6 +445,19 @@
   aspect-ratio: 16 / 9;
   background: #000;
   overflow: hidden;
+}
+
+.chat-video-index-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.chat-video-card-wrapper:hover .chat-video-index-btn {
+  opacity: 1;
 }
 
 .chat-video-thumb img {

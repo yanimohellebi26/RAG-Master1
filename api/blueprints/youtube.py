@@ -142,3 +142,26 @@ def search_videos():
     except Exception as exc:
         logger.error("Video search failed: %s", exc)
         return jsonify({"error": str(exc)}), 500
+
+
+@youtube_bp.route("/youtube/history", methods=["GET"])
+def get_indexed_videos():
+    """Get all YouTube videos indexed in ChromaDB."""
+    subject = request.args.get("subject")
+    try:
+        videos = youtube_service.get_indexed_videos(subject=subject or None)
+        return jsonify({"videos": videos, "total": len(videos)})
+    except Exception as exc:
+        logger.error("Failed to fetch indexed videos: %s", exc)
+        return jsonify({"error": str(exc)}), 500
+
+
+@youtube_bp.route("/youtube/history/<video_id>", methods=["DELETE"])
+def delete_indexed_video(video_id):
+    """Delete an indexed YouTube video from ChromaDB."""
+    try:
+        result = youtube_service.delete_indexed_video(video_id)
+        return jsonify(result)
+    except Exception as exc:
+        logger.error("Failed to delete video %s: %s", video_id, exc)
+        return jsonify({"error": str(exc)}), 500
