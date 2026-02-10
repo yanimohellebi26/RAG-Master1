@@ -10,6 +10,14 @@ from typing import Any
 import pandas as pd
 import streamlit as st
 
+from core.constants import (
+    META_MATIERE,
+    META_DOC_TYPE,
+    META_FILENAME,
+    DEFAULT_MATIERE,
+    DEFAULT_DOC_TYPE,
+)
+
 # ---------------------------------------------------------------------------
 # CSS
 # ---------------------------------------------------------------------------
@@ -76,9 +84,9 @@ def format_docs(docs: list) -> str:
     """Concatenate retrieved documents into a single context string."""
     parts: list[str] = []
     for doc in docs:
-        matiere = doc.metadata.get("matiere", "Inconnu")
-        doc_type = doc.metadata.get("doc_type", "Document")
-        filename = doc.metadata.get("filename", "")
+        matiere = doc.metadata.get(META_MATIERE, DEFAULT_MATIERE)
+        doc_type = doc.metadata.get(META_DOC_TYPE, DEFAULT_DOC_TYPE)
+        filename = doc.metadata.get(META_FILENAME, "")
         parts.append(
             f"[{matiere} -- {doc_type} -- {filename}]\n{doc.page_content}"
         )
@@ -90,14 +98,14 @@ def deduplicate_sources(docs: list) -> list[dict[str, str]]:
     sources: list[dict[str, str]] = []
     seen: set[str] = set()
     for doc in docs:
-        key = doc.metadata.get("filename", "")
+        key = doc.metadata.get(META_FILENAME, "")
         if key in seen:
             continue
         seen.add(key)
         sources.append({
-            "matiere": doc.metadata.get("matiere", "Inconnu"),
-            "doc_type": doc.metadata.get("doc_type", "Document"),
-            "filename": key,
+            META_MATIERE: doc.metadata.get(META_MATIERE, DEFAULT_MATIERE),
+            META_DOC_TYPE: doc.metadata.get(META_DOC_TYPE, DEFAULT_DOC_TYPE),
+            META_FILENAME: key,
         })
     return sources
 
@@ -111,8 +119,8 @@ def show_sources(sources: list[dict[str, str]], *, expanded: bool = True) -> Non
         for src in sources:
             st.markdown(
                 f'<div class="source-box">'
-                f'<span class="matiere-tag">{src["matiere"]}</span> '
-                f'**{src["doc_type"]}** -- _{src["filename"]}_'
+                f'<span class="matiere-tag">{src[META_MATIERE]}</span> '
+                f'**{src[META_DOC_TYPE]}** -- _{src[META_FILENAME]}_'
                 f"</div>",
                 unsafe_allow_html=True,
             )
