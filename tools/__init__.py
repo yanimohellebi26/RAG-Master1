@@ -4,6 +4,5 @@ from tools.copilot import (
     copilot_generate,
     is_copilot_ready,
     get_available_models,
-    TOOL_LABELS,
     COPILOT_SDK_AVAILABLE,
 )

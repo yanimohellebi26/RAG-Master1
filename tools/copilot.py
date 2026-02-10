@@ -8,7 +8,7 @@ pipeline.
 
 import json
 import asyncio
-import traceback
+import logging
 from typing import Any
 
 from core.constants import (
@@ -29,6 +29,8 @@ try:
     COPILOT_SDK_AVAILABLE = True
 except ImportError:
     COPILOT_SDK_AVAILABLE = False
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Constants (re-exported from core.constants for backward compatibility)
@@ -257,8 +259,7 @@ def copilot_generate(
             _generate_async(tool_type, content, model, n, sources)
         )
     except Exception as exc:
+        logger.exception("Copilot generation failed")
         return {
-            "error": f"Erreur lors de la generation : {exc}",
-            "exception_type": type(exc).__name__,
-            "traceback": traceback.format_exc()[:500],
+            "error": f"Erreur lors de la generation : {type(exc).__name__}",
         }

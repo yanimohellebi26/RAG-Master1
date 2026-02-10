@@ -2,16 +2,22 @@
 Copilot Blueprint -- /api/copilot routes.
 """
 
+import logging
 from typing import Any
 
 from flask import Blueprint, jsonify, request
 
+from core.constants import COPILOT_MAX_CONTENT_LENGTH, TOOL_LABELS
+from core.validators import validate_question
 from tools.copilot import (
     COPILOT_SDK_AVAILABLE,
     copilot_generate,
 )
 
+logger = logging.getLogger(__name__)
 copilot_bp = Blueprint("copilot", __name__)
+
+_VALID_TOOL_TYPES: frozenset[str] = frozenset(TOOL_LABELS.keys())
 
 
 @copilot_bp.route("/copilot", methods=["POST"])
@@ -26,10 +32,12 @@ def copilot_tool():
     model: str = data.get("model", "gpt-4o")
     sources: list[dict[str, str]] = data.get("sources", [])
 
-    if not tool_type:
-        return jsonify({"error": "Type d'outil requis"}), 400
+    if not tool_type or tool_type not in _VALID_TOOL_TYPES:
+        return jsonify({"error": f"Type d'outil invalide. Valides: {sorted(_VALID_TOOL_TYPES)}"}), 400
     if not content:
         return jsonify({"error": "Contenu requis"}), 400
+    if len(content) > COPILOT_MAX_CONTENT_LENGTH * 2:
+        return jsonify({"error": "Contenu trop long"}), 400
     if not COPILOT_SDK_AVAILABLE:
         return jsonify({"error": "SDK Copilot non installe"}), 400
 

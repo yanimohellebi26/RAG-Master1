@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 import hljs from 'highlight.js'
 import { useChat } from '../../../contexts/ChatContext'
 import './ChatArea.css'
@@ -16,6 +17,12 @@ marked.setOptions({
   breaks: true,
   gfm: true,
 })
+
+/** Render markdown to sanitized HTML. */
+function renderMarkdown(text) {
+  const raw = marked(text || '')
+  return DOMPurify.sanitize(raw, { USE_PROFILES: { html: true } })
+}
 
 export default function ChatArea({ onOpenCopilot }) {
   const { messages, sendMessage, isStreaming } = useChat()
@@ -98,7 +105,7 @@ export default function ChatArea({ onOpenCopilot }) {
                     <>
                       <div 
                         className="message-text"
-                        dangerouslySetInnerHTML={{ __html: marked(message.content || 'Génération en cours...') }}
+                        dangerouslySetInnerHTML={{ __html: renderMarkdown(message.content || 'Génération en cours...') }}
                       />
                       {message.sources && message.sources.length > 0 && (
                         <details className="sources-details">

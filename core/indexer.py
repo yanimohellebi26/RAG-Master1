@@ -6,6 +6,7 @@ embedding with automatic retry on rate-limit errors.
 Incremental reindexing with MD5 hash tracking.
 """
 
+import logging
 import os
 import sys
 import time
@@ -14,6 +15,8 @@ import hashlib
 import fnmatch
 from pathlib import Path
 from collections import Counter
+
+logger = logging.getLogger(__name__)
 
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -34,9 +37,9 @@ from core.config import (
     SUPPORTED_EXTENSIONS,
     EXCLUDED_PATTERNS,
     SUBJECT_NAMES,
-    EMBEDDING_MODEL,
 )
 from core.constants import (
+    EMBEDDING_MODEL,
     META_MATIERE,
     META_DOC_TYPE,
     META_FILENAME,
@@ -51,15 +54,9 @@ from core.constants import (
     EXAM_KEYWORDS,
     CORRECTION_KEYWORDS,
     DEFAULT_DOC_TYPE,
+    DEFAULT_MATIERE,
     FILE_HASH_CHUNK_SIZE,
 )
-
-# ---------------------------------------------------------------------------
-# Startup check
-# ---------------------------------------------------------------------------
-
-if not OPENAI_API_KEY:
-    sys.exit("Cle API OpenAI introuvable dans .env")
 
 # Filename keywords -> document type classification (from constants)
 
@@ -69,14 +66,15 @@ if not OPENAI_API_KEY:
 
 
 def compute_file_hash(filepath: str) -> str:
-    """Compute MD5 hash of a file for change detection."""
-    md5_hash = hashlib.md5()
+    """Compute SHA-256 hash of a file for change detection."""
+    sha256_hash = hashlib.sha256()
     try:
         with open(filepath, "rb") as f:
             for chunk in iter(lambda: f.read(FILE_HASH_CHUNK_SIZE), b""):
-                md5_hash.update(chunk)
-        return md5_hash.hexdigest()
+                sha256_hash.update(chunk)
+        return sha256_hash.hexdigest()
     except Exception:
+        logger.warning("Failed to hash file: %s", filepath)
         return ""
 
 
@@ -215,10 +213,13 @@ def load_all_documents(
                 )
                 filepaths_processed.add(filepath)
             except Exception as exc:
-                print(f"  [ERREUR] {filename}: {exc}")
+                logger.error("Error loading %s: %s", filename, exc)
 
     if total_files > 0:
-        print(f"  Total de fichiers trouves: {total_files}, Exclus: {skipped_files}, Charges: {len(filepaths_processed)}")
+        logger.info(
+            "Total files found: %d, Excluded: %d, Loaded: %d",
+            total_files, skipped_files, len(filepaths_processed),
+        )
     
     return docs, filepaths_processed, filepaths_all_current
 
@@ -247,7 +248,7 @@ def delete_documents_by_filepath(vectorstore, filepaths: set[str]) -> int:
             return len(ids_to_delete)
         return 0
     except Exception as exc:
-        print(f"  [ERREUR] Suppression: {exc}")
+        logger.error("Error deleting documents: %s", exc)
         return 0
 
 
@@ -258,6 +259,9 @@ def delete_documents_by_filepath(vectorstore, filepaths: set[str]) -> int:
 
 def main(incremental: bool = False, force_full: bool = False) -> None:
     """Run the full indexation pipeline."""
+    if not OPENAI_API_KEY:
+        sys.exit("OPENAI_API_KEY not found in .env")
+
     print("=" * 55)
     print("Indexation RAG - Master 1 Informatique")
     print("=" * 55)
@@ -371,7 +375,7 @@ def main(incremental: bool = False, force_full: bool = False) -> None:
         all_docs = vectorstore.get(include=["metadatas"])
         if all_docs and all_docs.get("metadatas"):
             subject_counts = Counter(
-                meta.get(META_MATIERE, DEFAULT_DOC_TYPE)
+                meta.get(META_MATIERE, DEFAULT_MATIERE)
                 for meta in all_docs["metadatas"]
                 if meta
             )

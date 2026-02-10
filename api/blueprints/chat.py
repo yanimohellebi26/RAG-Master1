@@ -3,6 +3,7 @@ Chat Blueprint -- /api/chat and /api/clear routes.
 """
 
 import json
+import logging
 import time
 from typing import Any
 
@@ -21,6 +22,7 @@ from core.constants import (
 from core.retrieval import enhanced_retrieve
 from core.validators import validate_nb_sources, validate_question, validate_subjects
 
+logger = logging.getLogger(__name__)
 chat_bp = Blueprint("chat", __name__)
 
 PROMPT_TEMPLATE = ChatPromptTemplate.from_messages([

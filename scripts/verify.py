@@ -44,7 +44,7 @@ try:
     print("   core.watcher OK")
 
     test_hash = compute_file_hash(__file__)
-    if len(test_hash) == 32:
+    if len(test_hash) == 64:
         print("   compute_file_hash OK")
     else:
         warnings.append("compute_file_hash retourne un hash invalide")

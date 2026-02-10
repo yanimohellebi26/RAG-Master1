@@ -6,8 +6,8 @@ and provides detailed per-question diagnostics.  Can be run standalone
 (CLI) or imported by the Streamlit UI for interactive evaluation.
 """
 
-import os
 import json
+import logging
 import time
 import re
 import unicodedata
@@ -17,6 +17,8 @@ from typing import Any
 from dataclasses import dataclass, field, asdict
 
 import numpy as np
+
+logger = logging.getLogger(__name__)
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
@@ -647,12 +649,20 @@ def main() -> None:
     )
 
     from core.retrieval import BM25Index
+    from langchain_core.documents import Document as LCDoc
+
     print("Construction de l'index BM25...")
+    bm25_index = None
     all_docs = vectorstore.get(include=["documents", "metadatas"])
-    bm25_index = BM25Index()
     if all_docs and all_docs.get("documents"):
-        bm25_index.fit(all_docs["documents"], all_docs.get("metadatas"))
-        print(f"  Index BM25: {len(all_docs['documents'])} documents indexes")
+        docs = [
+            LCDoc(page_content=content, metadata=meta or {})
+            for content, meta in zip(
+                all_docs["documents"], all_docs["metadatas"]
+            )
+        ]
+        bm25_index = BM25Index(docs)
+        print(f"  Index BM25: {len(docs)} documents indexes")
 
     def progress(idx, total, q):
         print(f"\n  [{idx + 1}/{total}] {q[:70]}...")

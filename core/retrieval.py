@@ -11,8 +11,11 @@ Provides:
 import re
 import math
 import json
+import logging
 from collections import Counter
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -92,7 +95,7 @@ def rewrite_query(
                 "original": question,
             }
     except Exception:
-        pass
+        logger.warning("Query rewrite failed, using original question")
 
     return fallback
 
@@ -283,6 +286,7 @@ def compress_documents(
                 )
                 compressed.append(new_doc)
         except Exception:
+            logger.debug("Compression failed for a document, keeping original")
             compressed.append(doc)
 
     compressed.extend(docs[max_docs:])
@@ -336,6 +340,7 @@ def rerank_documents(
 
             scored.append((doc, score))
         except Exception:
+            logger.debug("Reranking failed for a document, using default score")
             scored.append((doc, _DEFAULT_RERANK_SCORE))
 
     scored.sort(key=lambda x: x[1], reverse=True)

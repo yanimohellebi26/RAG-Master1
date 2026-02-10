@@ -149,6 +149,7 @@ ALL_SUBJECTS: list[str] = [
     "Genie Logiciel",
     "Intelligence Artificielle",
     "Logique & Prolog",
+    "SGBD Graphes",
     "Systemes Distribues",
     "Systemes de Gestion de Donnees",
 ]

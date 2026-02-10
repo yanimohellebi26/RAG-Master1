@@ -6,6 +6,7 @@ Usage:
     app = create_app()
 """
 
+import logging
 import os
 import secrets
 
@@ -16,6 +17,8 @@ from api.blueprints.chat import chat_bp
 from api.blueprints.copilot import copilot_bp
 from api.blueprints.evaluation import eval_bp
 from api.blueprints.config import config_bp
+
+logger = logging.getLogger(__name__)
 
 
 def create_app() -> Flask:
@@ -30,6 +33,22 @@ def create_app() -> Flask:
         static_folder=os.path.join(dist_dir, "assets"),
     )
     app.secret_key = os.getenv("FLASK_SECRET_KEY") or secrets.token_hex(32)
+
+    if not os.getenv("FLASK_SECRET_KEY"):
+        logger.warning(
+            "FLASK_SECRET_KEY not set — using random key. "
+            "Sessions will not survive restarts."
+        )
+
+    # -- CORS headers for development --------------------------------------
+    @app.after_request
+    def add_cors_headers(response):
+        origin = os.getenv("CORS_ORIGIN", "")
+        if origin:
+            response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        return response
 
     # -- Initialise shared services -----------------------------------------
     rag_service.init_app(app)

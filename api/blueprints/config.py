@@ -2,6 +2,8 @@
 Config Blueprint -- /api/config routes.
 """
 
+import logging
+
 from flask import Blueprint, jsonify
 
 from core.constants import ALL_SUBJECTS, COPILOT_AVAILABLE_MODELS, TOOL_LABELS
@@ -11,6 +13,7 @@ from tools.copilot import (
     is_copilot_ready,
 )
 
+logger = logging.getLogger(__name__)
 config_bp = Blueprint("config", __name__)
 
 

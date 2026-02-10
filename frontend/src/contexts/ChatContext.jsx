@@ -24,8 +24,6 @@ export function ChatProvider({ children }) {
       timestamp: new Date().toISOString(),
     }
 
-    setMessages(prev => [...prev, userMessage])
-
     const assistantMessage = {
       role: 'assistant',
       content: '',
@@ -34,11 +32,13 @@ export function ChatProvider({ children }) {
       timestamp: new Date().toISOString(),
     }
 
-    setMessages(prev => [...prev, assistantMessage])
+    // Push both messages and capture the assistant's index via functional update
+    let assistantIndex
+    setMessages(prev => {
+      assistantIndex = prev.length + 1
+      return [...prev, userMessage, assistantMessage]
+    })
     setIsStreaming(true)
-
-    // We need the index *after* both messages are pushed
-    const messageIndex = messages.length + 1
 
     try {
       const reader = await sendChatMessage({
@@ -64,13 +64,20 @@ export function ChatProvider({ children }) {
 
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue
-          const data = JSON.parse(line.slice(6))
+          let data
+          try {
+            data = JSON.parse(line.slice(6))
+          } catch {
+            continue
+          }
 
           if (data.type === 'meta') {
             setMessages(prev => {
               const next = [...prev]
-              next[messageIndex] = {
-                ...next[messageIndex],
+              const idx = assistantIndex
+              if (!next[idx]) return prev
+              next[idx] = {
+                ...next[idx],
                 sources: data.sources,
                 metadata: {
                   retrieval_time: data.retrieval_time,
@@ -85,19 +92,23 @@ export function ChatProvider({ children }) {
           } else if (data.type === 'token') {
             setMessages(prev => {
               const next = [...prev]
-              next[messageIndex] = {
-                ...next[messageIndex],
-                content: next[messageIndex].content + data.content,
+              const idx = assistantIndex
+              if (!next[idx]) return prev
+              next[idx] = {
+                ...next[idx],
+                content: next[idx].content + data.content,
               }
               return next
             })
           } else if (data.type === 'done') {
             setMessages(prev => {
               const next = [...prev]
-              next[messageIndex] = {
-                ...next[messageIndex],
+              const idx = assistantIndex
+              if (!next[idx]) return prev
+              next[idx] = {
+                ...next[idx],
                 metadata: {
-                  ...next[messageIndex].metadata,
+                  ...next[idx].metadata,
                   total_time: data.total_time,
                 },
               }
@@ -110,8 +121,10 @@ export function ChatProvider({ children }) {
       console.error('Chat error:', err)
       setMessages(prev => {
         const next = [...prev]
-        next[messageIndex] = {
-          ...next[messageIndex],
+        const idx = assistantIndex
+        if (!next[idx]) return prev
+        next[idx] = {
+          ...next[idx],
           content: `Erreur: ${err.message || 'Impossible de contacter le serveur.'}`,
           error: true,
         }
@@ -120,7 +133,7 @@ export function ChatProvider({ children }) {
     } finally {
       setIsStreaming(false)
     }
-  }, [messages.length, settings])
+  }, [settings])
 
   const clearMessages = useCallback(async () => {
     try {

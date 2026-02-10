@@ -30,6 +30,16 @@ chroma_db/
 
 # Autres
 .DS_Store
+Thumbs.db
 *.zip
 Master1/
 *.log
+
+# Node.js
+frontend/node_modules/
+frontend/dist/
+
+# Pytest
+.pytest_cache/
+htmlcov/
+.coverage

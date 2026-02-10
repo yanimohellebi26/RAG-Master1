@@ -2,6 +2,7 @@
 Evaluation Blueprint -- /api/eval/* routes.
 """
 
+import logging
 from dataclasses import asdict
 
 from flask import Blueprint, jsonify
@@ -15,22 +16,27 @@ from evaluation.evaluator import (
     save_results,
 )
 
+logger = logging.getLogger(__name__)
 eval_bp = Blueprint("evaluation", __name__)
 
 
 @eval_bp.route("/eval/run", methods=["POST"])
 def run_eval():
     """Run the full evaluation pipeline."""
-    svc = rag_service
-    summary = run_evaluation(
-        vectorstore=svc.vectorstore,
-        llm=svc.llm,
-        nb_sources=DEFAULT_NB_SOURCES,
-        bm25_index=svc.bm25_index,
-        enable_enhanced=True,
-    )
-    save_results(summary)
-    return jsonify(asdict(summary))
+    try:
+        svc = rag_service
+        summary = run_evaluation(
+            vectorstore=svc.vectorstore,
+            llm=svc.llm,
+            nb_sources=DEFAULT_NB_SOURCES,
+            bm25_index=svc.bm25_index,
+            enable_enhanced=True,
+        )
+        save_results(summary)
+        return jsonify(asdict(summary))
+    except Exception:
+        logger.exception("Evaluation failed")
+        return jsonify({"error": "Evaluation failed"}), 500
 
 
 @eval_bp.route("/eval/latest", methods=["GET"])

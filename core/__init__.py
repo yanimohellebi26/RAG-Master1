@@ -16,3 +16,11 @@ from core.retrieval import (
     hybrid_search,
 )
 from core.indexer import compute_file_hash, should_exclude_path
+from core.exceptions import (
+    RAGException,
+    ConfigurationError,
+    IndexationError,
+    RetrievalError,
+    EvaluationError,
+    CopilotError,
+)
