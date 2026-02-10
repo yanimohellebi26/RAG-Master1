@@ -94,3 +94,40 @@ export function fetchLatestEval() {
 export function fetchEvalHistory() {
   return get('/eval/history')
 }
+
+// ---------------------------------------------------------------------------
+// YouTube
+// ---------------------------------------------------------------------------
+
+export function fetchYouTubeStatus() {
+  return get('/youtube/status')
+}
+
+export function fetchYouTubeTranscript(payload) {
+  return post('/youtube/transcript', payload)
+}
+
+export function indexYouTubeTranscript(payload) {
+  return post('/youtube/index', payload)
+}
+
+export function searchYouTubeVideos(payload) {
+  return post('/youtube/search', payload)
+}
+
+/**
+ * Stream an AI analysis of a YouTube video via SSE.
+ * Returns a ReadableStream reader for the caller to consume.
+ */
+export async function analyzeYouTubeStream(payload) {
+  const res = await fetch(`${BASE}/youtube/analyze/stream`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }))
+    throw new Error(err.error || res.statusText)
+  }
+  return res.body.getReader()
+}

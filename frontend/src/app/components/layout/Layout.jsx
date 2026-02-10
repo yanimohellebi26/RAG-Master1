@@ -39,6 +39,9 @@ export default function Layout() {
             <NavLink to="/evaluation" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               Evaluation
             </NavLink>
+            <NavLink to="/youtube" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              YouTube
+            </NavLink>
             {/* Add more nav links here as you build new pages */}
           </nav>
           <h1 className="topbar-title gradient-text">

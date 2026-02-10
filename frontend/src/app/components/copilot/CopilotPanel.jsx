@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { generateCopilotTool } from '../../../services/api'
+import { generateCopilotTool, searchYouTubeVideos } from '../../../services/api'
 import './CopilotPanel.css'
 
 export default function CopilotPanel({ config, messages, context, model, onClose }) {
@@ -14,6 +14,26 @@ export default function CopilotPanel({ config, messages, context, model, onClose
     if (!lastMessage || !lastQuestion) return
 
     setLoading(prev => ({ ...prev, [toolType]: true }))
+
+    // Special handling for video search tool
+    if (toolType === 'video') {
+      try {
+        const result = await searchYouTubeVideos({
+          concept: lastQuestion.content,
+          context: context?.slice(0, 3000) || '',
+          max_results: 5,
+        })
+        setResults(prev => ({ ...prev, [toolType]: result }))
+        setActiveTools(prev => ({ ...prev, [toolType]: true }))
+      } catch (err) {
+        console.error('Video search failed:', err)
+        setResults(prev => ({ ...prev, [toolType]: { error: err.message || 'Erreur de recherche' } }))
+        setActiveTools(prev => ({ ...prev, [toolType]: true }))
+      } finally {
+        setLoading(prev => ({ ...prev, [toolType]: false }))
+      }
+      return
+    }
     
     const content = `Question de l'étudiant : ${lastQuestion.content}\n\nRéponse du cours :\n${lastMessage.content}\n\nExtraits des cours :\n${context?.slice(0, 3000) || ''}`
     
@@ -62,6 +82,8 @@ export default function CopilotPanel({ config, messages, context, model, onClose
         return <FlashcardsRenderer data={result} />
       case 'mindmap':
         return <MindmapRenderer data={result} />
+      case 'video':
+        return <VideoRenderer data={result} />
       default:
         return <pre>{JSON.stringify(result, null, 2)}</pre>
     }
@@ -234,6 +256,94 @@ function MindmapRenderer({ data }) {
           </ul>
         </div>
       ))}
+    </div>
+  )
+}
+
+function VideoRenderer({ data }) {
+  return (
+    <div className="video-results">
+      <div className="video-header-info">
+        <h4>🎥 Vidéos pour : <em>{data.concept}</em></h4>
+        {data.tips && <p className="video-tips">💡 {data.tips}</p>}
+      </div>
+
+      {data.videos && data.videos.length > 0 ? (
+        <div className="video-grid">
+          {data.videos.map((video, idx) => (
+            <a
+              key={idx}
+              href={video.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="video-card"
+            >
+              <div className="video-thumbnail">
+                {video.thumbnail ? (
+                  <img src={video.thumbnail} alt={video.title} loading="lazy" />
+                ) : (
+                  <div className="video-thumb-placeholder">▶</div>
+                )}
+                {video.duration && (
+                  <span className="video-duration">{video.duration}</span>
+                )}
+              </div>
+              <div className="video-info">
+                <h5 className="video-title">{video.title}</h5>
+                <span className="video-channel">{video.channel}</span>
+                {video.views && (
+                  <span className="video-views">{video.views}</span>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <p className="video-no-results">Aucune vidéo trouvée. Essayez les liens de recherche ci-dessous.</p>
+      )}
+
+      {data.queries && data.queries.length > 0 && (
+        <div className="video-search-links">
+          <h5>🔍 Rechercher sur YouTube :</h5>
+          {data.queries.map((q, idx) => {
+            const query = typeof q === 'string' ? q : q.query
+            const desc = typeof q === 'object' ? q.description : ''
+            const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`
+            return (
+              <a
+                key={idx}
+                href={searchUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="video-search-link"
+              >
+                <span className="search-query">"{query}"</span>
+                {desc && <span className="search-desc">{desc}</span>}
+                <span className="search-arrow">↗</span>
+              </a>
+            )
+          })}
+        </div>
+      )}
+
+      {data.recommended_channels && data.recommended_channels.length > 0 && (
+        <div className="video-recommended">
+          <h5>📺 Chaînes recommandées :</h5>
+          <div className="channel-tags">
+            {data.recommended_channels.map((ch, idx) => (
+              <a
+                key={idx}
+                href={`https://www.youtube.com/results?search_query=${encodeURIComponent(ch)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="channel-tag"
+              >
+                {ch}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

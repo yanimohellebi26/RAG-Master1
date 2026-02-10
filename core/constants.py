@@ -185,6 +185,7 @@ TOOL_LABELS: dict[str, str] = {
     "concepts": "Concepts",
     "flashcards": "Flashcards",
     "mindmap": "Mind Map",
+    "video": "\ud83c\udfa5 Vid\u00e9o",
 }
 
 # ---------------------------------------------------------------------------

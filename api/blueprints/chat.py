@@ -4,6 +4,7 @@ Chat Blueprint -- /api/chat and /api/clear routes.
 
 import json
 import logging
+import re
 import time
 from typing import Any
 
@@ -30,6 +31,49 @@ PROMPT_TEMPLATE = ChatPromptTemplate.from_messages([
     MessagesPlaceholder("chat_history"),
     ("human", "{question}"),
 ])
+
+# ---------------------------------------------------------------------------
+# Video intent detection
+# ---------------------------------------------------------------------------
+
+_VIDEO_PATTERNS = [
+    re.compile(
+        r"(?:trouve|cherche|montre|donne|suggere|recommande|propose)"
+        r"[- ]?(?:moi|nous)?\s+"
+        r"(?:une?|des|la|les)?\s*"
+        r"(?:vid[eé]os?|tutos?|tutoriels?)\s+"
+        r"(?:explicati[fv]e?s?|sur|de|pour|qui|en rapport|a propos)"
+        r"\s+(.+)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"(?:vid[eé]os?\s+(?:sur|de|pour|explicati))\s+(.+)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"(?:je\s+(?:veux|voudrais|cherche|aimerais)\s+)"
+        r"(?:une?|des)?\s*"
+        r"(?:vid[eé]os?|tutos?)\s+(?:sur|de|pour|qui|explicati)\s+(.+)",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"(?:y\s*a[- ]?t[- ]?il|est[- ]ce\s+qu.il\s+y\s+a|as[- ]tu)\s+"
+        r"(?:une?|des)?\s*"
+        r"(?:vid[eé]os?|tutos?)\s+(?:sur|de|pour)\s+(.+)",
+        re.IGNORECASE,
+    ),
+]
+
+
+def detect_video_intent(question: str) -> str | None:
+    """Return the concept if the question asks for a video, else None."""
+    for pat in _VIDEO_PATTERNS:
+        m = pat.search(question)
+        if m:
+            concept = m.group(1).strip().rstrip("?!. ")
+            if len(concept) > 3:
+                return concept
+    return None
 
 
 @chat_bp.route("/chat", methods=["POST"])
@@ -61,6 +105,55 @@ def chat() -> Response:
     enable_compress: bool = data.get("enable_compress", False)
 
     svc = rag_service
+
+    # ------------------------------------------------------------------
+    # Short-circuit: if the user just wants a video, skip RAG + LLM
+    # ------------------------------------------------------------------
+    video_concept = detect_video_intent(question)
+    if video_concept:
+        def generate_video_only():
+            start_time = time.time()
+            try:
+                from api.services.youtube import youtube_service
+                video_results = youtube_service.search_videos(
+                    concept=video_concept,
+                    max_results=5,
+                )
+                # Send an empty meta so the frontend doesn't break
+                yield f"data: {json.dumps({'type': 'meta', 'sources': [], 'retrieval_time': 0, 'rewritten_query': question, 'steps': ['video_search'], 'num_docs': 0, 'context': ''}, ensure_ascii=False)}\n\n"
+
+                # Build a short text response listing the videos
+                lines = [f"🎥 **Vidéos trouvées pour : {video_concept}**\n"]
+                for i, v in enumerate(video_results.get("videos", []), 1):
+                    lines.append(f"{i}. [{v['title']}]({v['url']}) — *{v['channel']}* ({v.get('duration', '')})")
+                if video_results.get("recommended_channels"):
+                    lines.append("\n📺 **Chaînes recommandées** : " + ", ".join(video_results["recommended_channels"]))
+
+                text_response = "\n".join(lines)
+                yield f"data: {json.dumps({'type': 'token', 'content': text_response}, ensure_ascii=False)}\n\n"
+
+                total_time = time.time() - start_time
+                yield f"data: {json.dumps({'type': 'done', 'total_time': round(total_time, 2)}, ensure_ascii=False)}\n\n"
+
+                # Send structured video data for rich rendering
+                yield f"data: {json.dumps({'type': 'videos', 'concept': video_concept, 'videos': video_results.get('videos', []), 'queries': video_results.get('queries', []), 'recommended_channels': video_results.get('recommended_channels', []), 'tips': video_results.get('tips', '')}, ensure_ascii=False)}\n\n"
+
+                svc.append_exchange(question, text_response)
+            except Exception as exc:
+                logger.error("Video-only search failed: %s", exc)
+                yield f"data: {json.dumps({'type': 'meta', 'sources': [], 'retrieval_time': 0, 'rewritten_query': question, 'steps': [], 'num_docs': 0, 'context': ''}, ensure_ascii=False)}\n\n"
+                yield f"data: {json.dumps({'type': 'token', 'content': f'Erreur lors de la recherche de vidéos : {exc}'}, ensure_ascii=False)}\n\n"
+                yield f"data: {json.dumps({'type': 'done', 'total_time': round(time.time() - start_time, 2)}, ensure_ascii=False)}\n\n"
+
+        return Response(
+            stream_with_context(generate_video_only()),
+            mimetype="text/event-stream",
+            headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+        )
+
+    # ------------------------------------------------------------------
+    # Normal RAG pipeline
+    # ------------------------------------------------------------------
 
     def generate():
         start_time = time.time()

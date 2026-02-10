@@ -77,7 +77,7 @@ mcp:
 
   # Acquisition de contenu
   youtube-transcript:
-    enabled: false
+    enabled: true
     default_language: fr
   notion:
     enabled: false

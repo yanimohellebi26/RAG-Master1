@@ -123,6 +123,53 @@ export default function ChatArea({ onOpenCopilot }) {
                           </div>
                         </details>
                       )}
+                      {message.videos && message.videos.videos && message.videos.videos.length > 0 && (
+                        <div className="chat-video-results">
+                          <h4 className="chat-video-header">🎥 Vidéos trouvées pour : <em>{message.videos.concept}</em></h4>
+                          <div className="chat-video-grid">
+                            {message.videos.videos.map((video, vidx) => (
+                              <a
+                                key={vidx}
+                                href={video.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="chat-video-card"
+                              >
+                                <div className="chat-video-thumb">
+                                  {video.thumbnail ? (
+                                    <img src={video.thumbnail} alt={video.title} loading="lazy" />
+                                  ) : (
+                                    <span className="chat-video-play">▶</span>
+                                  )}
+                                  {video.duration && <span className="chat-video-duration">{video.duration}</span>}
+                                </div>
+                                <div className="chat-video-info">
+                                  <span className="chat-video-title">{video.title}</span>
+                                  <span className="chat-video-channel">{video.channel}</span>
+                                </div>
+                              </a>
+                            ))}
+                          </div>
+                          {message.videos.queries && message.videos.queries.length > 0 && (
+                            <div className="chat-video-search-links">
+                              {message.videos.queries.map((q, qidx) => {
+                                const query = typeof q === 'string' ? q : q.query
+                                return (
+                                  <a
+                                    key={qidx}
+                                    href={`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="chat-video-search-btn"
+                                  >
+                                    🔍 {query}
+                                  </a>
+                                )
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      )}
                       {message.metadata && (
                         <div className="message-metadata">
                           {message.metadata.rewritten_query && message.metadata.rewritten_query !== messages[idx-1]?.content && (

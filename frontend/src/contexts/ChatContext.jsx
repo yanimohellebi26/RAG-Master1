@@ -114,6 +114,23 @@ export function ChatProvider({ children }) {
               }
               return next
             })
+          } else if (data.type === 'videos') {
+            setMessages(prev => {
+              const next = [...prev]
+              const idx = assistantIndex
+              if (!next[idx]) return prev
+              next[idx] = {
+                ...next[idx],
+                videos: {
+                  concept: data.concept,
+                  videos: data.videos,
+                  queries: data.queries,
+                  recommended_channels: data.recommended_channels,
+                  tips: data.tips,
+                },
+              }
+              return next
+            })
           }
         }
       }

@@ -18,6 +18,7 @@ from api.blueprints.copilot import copilot_bp
 from api.blueprints.evaluation import eval_bp
 from api.blueprints.config import config_bp
 from api.blueprints.mcp import mcp_bp
+from api.blueprints.youtube import youtube_bp
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,7 @@ def create_app() -> Flask:
     app.register_blueprint(eval_bp, url_prefix="/api")
     app.register_blueprint(config_bp, url_prefix="/api")
     app.register_blueprint(mcp_bp, url_prefix="/api")
+    app.register_blueprint(youtube_bp, url_prefix="/api")
 
     # -- Initialise MCP registry --------------------------------------------
     _init_mcp(app)
