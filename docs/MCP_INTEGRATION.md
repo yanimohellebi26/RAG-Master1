@@ -1156,5 +1156,5 @@ creation de chaque MCP. Ce document sert de roadmap et de vision globale.
 **Etape 1** = Module revision (RAG Master 1) + GitHub Copilot SDK -- FAIT
 **Etape 2** = Integrations Rube/Composio + Skills (78+ apps SaaS, document processing, code tools, data analysis...) -- EN COURS
 **Etape 3** = Assistant personnel complet (vie sociale, booking, finances, sante, admin, loisirs)
-
+ idée ++ =  dans mes cours que j ai indexé ou les pdf , video que je voudrai indexé en plus parfois ya  du code je veux qu il's soit extrait ,dans la oage file avec filtre code + filtre module ça mfiche ce code dans un notebook executable
 
