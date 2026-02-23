@@ -335,9 +335,9 @@ Traitement d'images, OCR, text-to-speech.
        - [X] auth + sync des pages
        - [X] mapping titres/tags -> cours
        - [X] ajouter un bouton dans outils copilot pour demander d'enregistrer une synthese en notion de ce chat avec les ressources pour reprendre
-- [ ] **google-drive** -- synchronisation des documents partages
-       - [ ] import des PDF/Slides
-       - [ ] extraction texte + indexation
+- [X]**google-drive** -- synchronisation des documents partages
+       - [X] import des PDF/Slides
+       - [X] extraction texte + indexation
 
 **Impact :** Doubler la base de connaissances
 

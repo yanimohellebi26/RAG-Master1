@@ -42,7 +42,9 @@ export default function Layout() {
             <NavLink to="/youtube" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               YouTube
             </NavLink>
-            {/* Add more nav links here as you build new pages */}
+            <NavLink to="/gdrive" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              Drive
+            </NavLink>
           </nav>
           <h1 className="topbar-title gradient-text">
             RAG — Master 1

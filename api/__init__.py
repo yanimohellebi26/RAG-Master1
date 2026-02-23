@@ -20,6 +20,7 @@ from api.blueprints.config import config_bp
 from api.blueprints.mcp import mcp_bp
 from api.blueprints.youtube import youtube_bp
 from api.blueprints.notion import notion_bp
+from api.blueprints.google_drive import gdrive_bp
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +65,7 @@ def create_app() -> Flask:
     app.register_blueprint(mcp_bp, url_prefix="/api")
     app.register_blueprint(youtube_bp, url_prefix="/api")
     app.register_blueprint(notion_bp, url_prefix="/api")
+    app.register_blueprint(gdrive_bp, url_prefix="/api")
 
     # -- Initialise MCP registry --------------------------------------------
     _init_mcp(app)

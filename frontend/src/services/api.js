@@ -179,3 +179,31 @@ export function syncNotionPages(payload) {
 export function syncNotionSelectedPages(pageIds) {
   return post('/notion/sync', { page_ids: pageIds })
 }
+
+// ---------------------------------------------------------------------------
+// Google Drive
+// ---------------------------------------------------------------------------
+
+export function fetchGDriveStatus() {
+  return get('/gdrive/status')
+}
+
+export function connectGDrive() {
+  return post('/gdrive/connect', {})
+}
+
+export function fetchGDriveFiles(folderId, query) {
+  const params = new URLSearchParams()
+  if (folderId) params.set('folder_id', folderId)
+  if (query) params.set('query', query)
+  const qs = params.toString()
+  return get(`/gdrive/files${qs ? `?${qs}` : ''}`)
+}
+
+export function previewGDriveFile(fileId) {
+  return get(`/gdrive/file/${encodeURIComponent(fileId)}/preview`)
+}
+
+export function syncGDriveFolder(payload) {
+  return post('/gdrive/sync', payload)
+}

@@ -14,6 +14,7 @@ import Layout from './app/components/layout/Layout'
 import ChatPage from './pages/ChatPage'
 import EvaluationPage from './pages/EvaluationPage'
 import YouTubePage from './pages/YouTubePage'
+import GoogleDrivePage from './pages/GoogleDrivePage'
 
 export default function AppRoutes() {
   return (
@@ -22,7 +23,7 @@ export default function AppRoutes() {
         <Route index element={<ChatPage />} />
         <Route path="evaluation" element={<EvaluationPage />} />
         <Route path="youtube" element={<YouTubePage />} />
-        {/* Add more routes here as you extend the project */}
+        <Route path="gdrive" element={<GoogleDrivePage />} />
       </Route>
     </Routes>
   )

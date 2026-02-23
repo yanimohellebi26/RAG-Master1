@@ -1,0 +1,386 @@
+/* GoogleDrivePage styles */
+
+.gdrive-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 2rem;
+  gap: 1.5rem;
+}
+
+/* Header */
+.gd-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.gd-header-icon {
+  font-size: 2.5rem;
+}
+
+.gd-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.gd-header-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0;
+}
+
+.gd-header .badge {
+  margin-left: auto;
+}
+
+/* Connection section */
+.gd-connect-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gd-connect-info {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* Controls */
+.gd-controls {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.gd-controls-row {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.gd-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gd-input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.gd-folder-group {
+  flex: 1;
+}
+
+.gd-folder-input-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.gd-folder-input {
+  flex: 1;
+  padding: 0.6rem 0.9rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: monospace;
+}
+
+.gd-folder-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.15);
+}
+
+/* Files section */
+.gd-files-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.gd-files-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.gd-files-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gd-files-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gd-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.gd-files-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.gd-files-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.gd-file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+
+.gd-file-row:last-child {
+  border-bottom: none;
+}
+
+.gd-file-row:hover {
+  background: var(--bg);
+}
+
+.gd-file-row.selected {
+  background: rgba(102, 126, 234, 0.08);
+}
+
+.gd-file-checkbox-spacer {
+  width: 16px;
+}
+
+.gd-file-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.gd-file-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.gd-file-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gd-file-meta {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.gd-file-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* Preview */
+.gd-preview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.gd-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.gd-preview-header h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.gd-preview-meta {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.gd-preview-truncated {
+  color: var(--warning, #e5a100);
+  font-weight: 600;
+}
+
+.gd-preview-content {
+  padding: 1.5rem;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* Error */
+.gd-error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius);
+  color: var(--text);
+}
+
+.gd-error p {
+  flex: 1;
+  margin: 0;
+}
+
+/* Sync result */
+.gd-sync-result {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+}
+
+.gd-success-icon,
+.gd-warning-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.gd-sync-result h3 {
+  margin: 0 0 1rem;
+}
+
+.gd-sync-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+}
+
+.gd-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.gd-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.gd-stat-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.gd-sync-hint {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 1rem 0 0;
+}
+
+/* Empty state */
+.gd-empty {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.gd-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.gd-empty h3 {
+  margin: 0 0 0.75rem;
+}
+
+.gd-empty p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.gd-empty code {
+  background: var(--bg);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .gdrive-page {
+    padding: 1rem;
+  }
+
+  .gd-controls-row {
+    flex-direction: column;
+  }
+
+  .gd-folder-input-row {
+    flex-direction: column;
+  }
+
+  .gd-files-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .gd-sync-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
