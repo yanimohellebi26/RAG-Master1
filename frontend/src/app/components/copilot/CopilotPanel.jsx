@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { generateCopilotTool, searchYouTubeVideos } from '../../../services/api'
 import IndexVideoButton from '../ui/IndexVideoButton'
+import SaveToNotionButton from '../ui/SaveToNotionButton'
 import './CopilotPanel.css'
 
 export default function CopilotPanel({ config, messages, context, model, onClose }) {
@@ -15,6 +16,14 @@ export default function CopilotPanel({ config, messages, context, model, onClose
     if (!lastMessage || !lastQuestion) return
 
     setLoading(prev => ({ ...prev, [toolType]: true }))
+
+    // Special handling for notion tool — just show the save UI
+    if (toolType === 'notion') {
+      setResults(prev => ({ ...prev, [toolType]: { ready: true } }))
+      setActiveTools(prev => ({ ...prev, [toolType]: true }))
+      setLoading(prev => ({ ...prev, [toolType]: false }))
+      return
+    }
 
     // Special handling for video search tool
     if (toolType === 'video') {
@@ -85,6 +94,8 @@ export default function CopilotPanel({ config, messages, context, model, onClose
         return <MindmapRenderer data={result} />
       case 'video':
         return <VideoRenderer data={result} />
+      case 'notion':
+        return <NotionRenderer data={result} messages={messages} />
       default:
         return <pre>{JSON.stringify(result, null, 2)}</pre>
     }
@@ -257,6 +268,22 @@ function MindmapRenderer({ data }) {
           </ul>
         </div>
       ))}
+    </div>
+  )
+}
+
+function NotionRenderer({ data, messages }) {
+  const lastAssistant = messages.filter(m => m.role === 'assistant').slice(-1)[0]
+  const sources = lastAssistant?.sources || []
+
+  return (
+    <div className="notion-renderer">
+      <p>Sauvegarder cette conversation comme synthese dans Notion :</p>
+      <SaveToNotionButton
+        messages={messages}
+        sources={sources}
+        subjects={[]}
+      />
     </div>
   )
 }

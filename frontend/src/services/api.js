@@ -147,3 +147,35 @@ export async function analyzeYouTubeStream(payload) {
   }
   return res.body.getReader()
 }
+
+// ---------------------------------------------------------------------------
+// Notion
+// ---------------------------------------------------------------------------
+
+export function fetchNotionStatus() {
+  return get('/notion/status')
+}
+
+export function connectNotion() {
+  return post('/notion/connect', {})
+}
+
+export function saveToNotion(payload) {
+  return post('/notion/save-synthesis', payload)
+}
+
+export function searchNotionPages(payload) {
+  return post('/notion/search', payload)
+}
+
+export function fetchNotionPages() {
+  return get('/notion/pages')
+}
+
+export function syncNotionPages(payload) {
+  return post('/notion/sync', payload || {})
+}
+
+export function syncNotionSelectedPages(pageIds) {
+  return post('/notion/sync', { page_ids: pageIds })
+}

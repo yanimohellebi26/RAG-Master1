@@ -4,6 +4,7 @@ import DOMPurify from 'dompurify'
 import hljs from 'highlight.js'
 import { useChat } from '../../../contexts/ChatContext'
 import IndexVideoButton from '../ui/IndexVideoButton'
+import SaveToNotionButton from '../ui/SaveToNotionButton'
 import './ChatArea.css'
 import 'highlight.js/styles/github-dark.css'
 
@@ -207,8 +208,13 @@ export default function ChatArea({ onOpenCopilot }) {
       {messages.length > 0 && messages[messages.length - 1].role === 'assistant' && (
         <div className="copilot-actions">
           <button className="btn btn-secondary btn-sm" onClick={onOpenCopilot}>
-            🤖 Outils Copilot
+            Outils Copilot
           </button>
+          <SaveToNotionButton
+            messages={messages}
+            sources={messages[messages.length - 1]?.sources || []}
+            subjects={[]}
+          />
         </div>
       )}
 

@@ -1,27 +1,34 @@
 # RAG Master 1
 
-Assistant pédagogique basé sur RAG pour répondre aux questions sur les
-cours du Master 1 Informatique -- Université de Bourgogne.
+Assistant pedagogique base sur RAG pour repondre aux questions sur les
+cours du Master 1 Informatique -- Universite de Bourgogne.
 
-## Fonctionnalités
+## Fonctionnalites
 
 ### RAG Principal (OpenAI)
-- **Chat conversationnel** avec historique de session sécurisé
-- **Filtrage par matière** pour cibler les recherches
-- **Pipeline avancé** : query rewriting, hybrid search (BM25 + semantic), re-ranking
-- **Sources affichées** avec traçabilité complète
-- **Évaluation automatique** avec métriques détaillées
+- **Chat conversationnel** avec historique de session securise
+- **Filtrage par matiere** pour cibler les recherches
+- **Pipeline avance** : query rewriting, hybrid search (BM25 + semantic), re-ranking
+- **Sources affichees** avec tracabilite complete
+- **Evaluation automatique** avec metriques detaillees
 
 ### Copilot Tools (GitHub Copilot SDK)
-Panneau d'outils complémentaires pour enrichir visuellement les réponses :
-- **Quiz** -- Génération de QCM interactifs
-- **Tableau** -- Tableaux récapitulatifs / comparatifs
+Panneau d'outils complementaires pour enrichir visuellement les reponses :
+- **Quiz** -- Generation de QCM interactifs
+- **Tableau** -- Tableaux recapitulatifs / comparatifs
 - **Graphique** -- Visualisation en barres, lignes, aires
-- **Concepts clés** -- Extraction avec niveaux d'importance
-- **Flashcards** -- Cartes de révision recto-verso
-- **Mind Map** -- Carte mentale structurée
+- **Concepts cles** -- Extraction avec niveaux d'importance
+- **Flashcards** -- Cartes de revision recto-verso
+- **Mind Map** -- Carte mentale structuree
 
-##  Architecture
+### Serveurs MCP
+Integration de serveurs MCP (Model Context Protocol) pour etendre les capacites :
+- **YouTube Transcript** -- Indexation de cours video YouTube
+- **Gmail, Google Drive, Notion** -- Acquisition de contenu (prevu)
+- **Brave Search, Arxiv, Wikipedia** -- Recherche externe (prevu)
+- Voir `docs/MCP_INTEGRATION.md` pour la roadmap complete
+
+## Architecture
 
 ```
 OpenAI (gpt-4o-mini)          GitHub Copilot SDK
@@ -30,22 +37,24 @@ OpenAI (gpt-4o-mini)          GitHub Copilot SDK
    (reponses)             (quiz, tableaux, graphs)
        |                            |
        +------------+---------------+
-            Streamlit / Flask
                     |
-              ChromaDB (Vector Store)
+          Flask API + React Frontend
+                    |
+        +----------+----------+
+        |                     |
+   ChromaDB              Serveurs MCP
+  (Vector Store)      (YouTube, Gmail, ...)
 ```
 
-OpenAI est le LLM principal pour les réponses RAG. Le SDK Copilot fournit
-des outils complémentaires pour enrichir visuellement les réponses.
-
-##  Prérequis
+## Prerequis
 
 - Python 3.10+
-- Clé API OpenAI ([obtenir une clé](https://platform.openai.com/api-keys))
-- GitHub Copilot (CLI) - optionnel pour les outils visuels
+- Node.js 18+ (pour le frontend React)
+- Cle API OpenAI ([obtenir une cle](https://platform.openai.com/api-keys))
+- GitHub Copilot (CLI) -- optionnel pour les outils visuels
 - 2GB+ RAM (pour ChromaDB et embeddings)
 
-##  Installation
+## Installation
 
 ### 1. Cloner et configurer l'environnement
 
@@ -55,33 +64,52 @@ source venv/bin/activate  # Linux/Mac
 # ou
 venv\Scripts\activate  # Windows
 
-# Installer les dépendances
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
 ### 2. Configuration
 
-Copier le fichier d'exemple et configurer vos clés :
-
 ```bash
 cp .env.example .env
 ```
 
-Éditer `.env` et ajouter votre clé API :
-# Indexation complète (première fois)
+Editer `.env` et ajouter votre cle API :
+
+```
+OPENAI_API_KEY=sk-...
+```
+
+### 3. Indexer les cours
+
+Placer vos documents (PDF, TXT, CSV) dans `Master1/` en sous-dossiers par matiere.
+
+```bash
+# Indexation complete (premiere fois)
 python core/indexer.py
 
-# Indexation incrémentale (détecte les changements)
+# Indexation incrementale (detecte les changements)
 python core/indexer.py --incremental
 
-# Forcer une réindexation complète
+# Forcer une reindexation complete
 python core/indexer.py --force
 ```
 
 ### 4. Lancer l'application
 
-**Interface Streamlit (recommandé pour démo):**
+**API Flask + Frontend React :**
+
+```bash
+# Terminal 1 : Backend Flask
+python web_app.py
+
+# Terminal 2 : Frontend React
+cd frontend && npm install && npm run dev
+```
+
+Ouvrir http://localhost:5173
+
+**Interface Streamlit (demo) :**
 
 ```bash
 streamlit run app.py
@@ -89,40 +117,34 @@ streamlit run app.py
 
 Ouvrir http://localhost:8501
 
-**API Flask + Frontend React:**
+## Structure du projet
 
-```bash
-# Terminal 1: Backend Flask
-python web_app.py
+```
+core/                  # Modules principaux
+├── config.py          # Configuration centralisee
+├── indexer.py         # Indexation documents -> ChromaDB
+├── retrieval.py       # Pipeline RAG ameliore
+├── validators.py      # Validation des entrees
+└── exceptions.py      # Exceptions personnalisees
+api/                   # Endpoints Flask (blueprints)
+evaluation/            # Systeme d'evaluation automatique
+├── evaluator.py       # Metriques et evaluation
+tools/                 # Integrations externes
+├── copilot.py         # GitHub Copilot SDK
+mcp/                   # Serveurs MCP
+├── base.py            # Classe de base MCP
+├── registry.py        # Registre des serveurs
+└── discovery.py       # Decouverte automatique
+tests/                 # Tests unitaires et integration
+frontend/              # Interface React (Vite)
+scripts/               # Scripts utilitaires
+docs/                  # Documentation du projet
+config.yaml            # Configuration indexation & MCP
+web_app.py             # Serveur Flask
+app.py                 # Interface Streamlit
+```
 
-# Terminal 2: Frontend React (si développement)
-├── core/                   # Modules principaux
-│   ├── config.py          # Configuration centralisée
-│   ├── indexer.py         # Indexation documents → ChromaDB
-│   ├── retrieval.py       # Pipeline RAG amélioré
-│   ├── validators.py      # Validation des entrées (NEW)
-│   └── exceptions.py      # Exceptions personnalisées (NEW)
-├── evaluation/            # Système d'évaluation automatique
-│   └── evaluator.py       # Métriques et évaluation
-├── tools/                 # Intégrations externes
-│   └── copilot.py         # GitHub Copilot SDK
-├── tests/                 # Tests unitaires et intégration
-│   ├── conftest.py        # Fixtures pytest
-│   └── test_rag.py        # Suite de tests
-├── frontend/              # Interface React (optionnel)
-├── app.py                 # Interface Streamlit
-├── web_app.py             # API Flask + serveur
-├── config.yaml            # Configuration indexation
-├── requirements.txt       # Dépendances Python
-├── .env.example           # Template configuration (NEW)
-├── CODE_REVIEW.md         # Rapport d'audit (NEW)
-├── chroma_db/             # Base vectorielle (généré)
-├── eval_results/          # Résultats évaluations (généré)
-└── Master1/               # Vos cours ici
-
-##  Tests
-
-Lancer la suite de tests :
+## Tests
 
 ```bash
 # Tous les tests
@@ -131,93 +153,71 @@ pytest
 # Tests avec couverture
 pytest --cov=core --cov=evaluation --cov=tools
 
-# Tests spécifiques
+# Tests specifiques
 pytest tests/test_rag.py::TestRetrieval -v
 ```
 
-##  Évaluation
-Évaluer la qualité du système RAG :
+## Evaluation
 
 ```bash
 python -m scripts.evaluate
 ```
 
-Ou depuis l'interface Streamlit : section "Évaluation du système RAG"
+Ou depuis l'interface Streamlit : section "Evaluation du systeme RAG"
 
-**Métriques calculées:**
-- Faithfulness (fidélité aux sources)
-- Relevance (pertinence de la réponse)
-- Completeness (complétude)
-- Semantic similarity (similarité sémantique)
-- Keyword coverage (couverture mots-clés)
+**Metriques calculees :**
+- Faithfulness (fidelite aux sources)
+- Relevance (pertinence de la reponse)
+- Completeness (completude)
+- Semantic similarity (similarite semantique)
+- Keyword coverage (couverture mots-cles)
 
-##  Configuration Avancée
+## Configuration avancee
 
-### Ajuster les paramètres RAG
-
-Éditer `config.yaml` :
+### Parametres RAG (`config.yaml`)
 
 ```yaml
-# Taille des chunks
 chunk_size: 3000
 chunk_overlap: 400
-
-# Modèle d'embeddings
 embedding_model: text-embedding-3-small
+supported_extensions: [.pdf, .txt, .csv]
+```
 
-# Extensions supportées
-supported_extensions:
-  - .pdf
-  - .txt
-  - .csv
+### Serveurs MCP (`config.yaml`)
+
+```yaml
+mcp:
+  youtube-transcript:
+    enabled: true
+    default_language: fr
+  brave-search:
+    enabled: false
+    # api_key: ""
 ```
 
 ### Variables d'environnement
 
-| Variable | Description | Requis | Défaut |
-|----------|-------------|---------|---------|
-| `OPENAI_API_KEY` | Clé API OpenAI | ✅ Oui | - |
-| `FLASK_SECRET_KEY` | Secret Flask sessions | ⚪ Non | Auto-généré |
-| `FLASK_ENV` | Environment | ⚪ Non | development |
+| Variable | Description | Requis | Defaut |
+|----------|-------------|--------|--------|
+| `OPENAI_API_KEY` | Cle API OpenAI | Oui | - |
+| `FLASK_SECRET_KEY` | Secret Flask sessions | Non | Auto-genere |
+| `FLASK_ENV` | Environnement | Non | development |
 
-##  Dépannage
+## Depannage
 
-### Erreur: "Clé API OpenAI introuvable"
- Vérifier que `.env` existe et contient `OPENAI_API_KEY`
+| Erreur | Solution |
+|--------|----------|
+| "Cle API OpenAI introuvable" | Verifier que `.env` contient `OPENAI_API_KEY` |
+| "Base vectorielle introuvable" | Lancer `python core/indexer.py` |
+| "SDK Copilot non installe" | Optionnel : `pip install github-copilot-sdk` |
+| Performance lente | Reduire `nb_sources`, desactiver rerank/compress |
 
-### Erreur: "Base vectorielle introuvable"
- Lancer d'abord: `python core/indexer.py`
+## Documentation
 
-### Erreur: "SDK Copilot non installé"
- Optionnel. Pour l'activer: `pip install github-copilot-sdk`
-
-### Performance lente
- Réduire `nb_sources` dans l'interface (par défaut: 10)  
- Désactiver les options avancées (rerank, compress)
-
-##  Contribution
-
-1. Fork le projet
-2. Créer une branche: `git checkout -b feature/nouvelle-fonctionnalite`
-3. Commiter: `git commit -am 'Ajout nouvelle fonctionnalité'`
-4. Push: `git push origin feature/nouvelle-fonctionnalite`
-5. Créer une Pull Request
-
-**Standards:**
-- Type hints obligatoires
-- Docstrings pour fonctions publiques
-- Tests pour nouvelles fonctionnalités
-- Validation des entrées utilisateur
-
+- `docs/DESCRIPTION.md` -- Description detaillee du projet et du pipeline
+- `docs/MCP_INTEGRATION.md` -- Roadmap des integrations MCP et vision globale
+- `docs/USAGE_GUIDE.md` -- Guide d'utilisation
 
 ## Licence
 
-MIT License - Voir [LICENSE](LICENSE) pour détails
-
----
-## Notes
-
-- Les cours doivent etre ranges dans le dossier `Master1/` (voir `indexer.py`).
-- Les sources utilisees sont affichees a la fin de chaque reponse.
-- Le panneau Copilot Tools apparait sous chaque reponse de l'assistant.
-- Les resultats des outils Copilot sont conserves dans l'historique.
+MIT License -- Voir [LICENSE](LICENSE) pour details
