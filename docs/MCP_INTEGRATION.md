@@ -331,10 +331,10 @@ Traitement d'images, OCR, text-to-speech.
 - [X] **youtube-transcript** -- ingestion des cours video
        - [X] recuperation des transcripts + nettoyage
        - [X] indexation dans ChromaDB
-- [ ] **notion** -- connexion des notes personnelles
-       - [ ] auth + sync des pages
-       - [ ] mapping titres/tags -> cours
-       - [ ] ajouter un bouton dans outils github pour demander d'enregistrer une synthese en notion de ce chat avec les ressources pour reprendre 
+- [X] **notion** -- connexion des notes personnelles
+       - [X] auth + sync des pages
+       - [X] mapping titres/tags -> cours
+       - [X] ajouter un bouton dans outils copilot pour demander d'enregistrer une synthese en notion de ce chat avec les ressources pour reprendre
 - [ ] **google-drive** -- synchronisation des documents partages
        - [ ] import des PDF/Slides
        - [ ] extraction texte + indexation
