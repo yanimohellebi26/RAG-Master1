@@ -44,7 +44,7 @@
 
 .nav-link.active {
   color: var(--accent);
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(232, 129, 58, 0.1);
 }
 
 .topbar-title {
@@ -150,7 +150,7 @@ select:focus,
 textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(232, 129, 58, 0.1);
 }
 
 textarea {

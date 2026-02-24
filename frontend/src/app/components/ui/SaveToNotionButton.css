@@ -24,7 +24,7 @@
 
 .notion-title-input:focus {
   outline: none;
-  border-color: var(--accent, #667eea);
+  border-color: var(--accent, #e8813a);
 }
 
 .notion-save-actions {

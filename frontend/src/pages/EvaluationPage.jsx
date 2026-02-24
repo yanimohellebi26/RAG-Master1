@@ -119,7 +119,13 @@ export default function EvaluationPage() {
               <div className="results-list">
                 {results.results.map((r, i) => {
                   const avg = (r.answer.faithfulness_score + r.answer.relevance_score + r.answer.completeness_score) / 3
-                  const icon = avg >= 0.7 ? '✅' : avg >= 0.4 ? '⚠️' : '❌'
+                  const iconColor = avg >= 0.7 ? '#22c55e' : avg >= 0.4 ? '#f59e0b' : '#ef4444'
+                  const iconPath = avg >= 0.7
+                    ? 'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3'
+                    : avg >= 0.4
+                    ? 'M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01'
+                    : 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM15 9l-6 6M9 9l6 6'
+                  const icon = <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={iconColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: 'middle', marginRight: '0.3rem' }}><path d={iconPath}/></svg>
                   return (
                     <details key={i} className="result-item">
                       <summary>
@@ -165,7 +171,7 @@ export default function EvaluationPage() {
 
       {!loading && !results && (
         <div className="empty-state">
-          <div className="empty-state-icon">📊</div>
+          <div className="empty-state-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
           <div className="empty-state-title">Aucune evaluation disponible</div>
           <p className="empty-state-text">
             Lancez une evaluation pour mesurer la qualite du systeme RAG.

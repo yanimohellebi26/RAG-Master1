@@ -68,7 +68,7 @@ export default function CopilotPanel({ config, messages, context, model, onClose
     if (result.error) {
       return (
         <div className="error-message">
-          <p>❌ {result.error}</p>
+          <p><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign:'middle',marginRight:'0.3rem'}}><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>{result.error}</p>
           {result.raw && (
             <details>
               <summary>Réponse brute</summary>
@@ -105,8 +105,8 @@ export default function CopilotPanel({ config, messages, context, model, onClose
     <div className="copilot-panel-overlay" onClick={onClose}>
       <div className="copilot-panel" onClick={e => e.stopPropagation()}>
         <div className="copilot-header">
-          <h2>🤖 Outils Copilot</h2>
-          <button className="btn btn-ghost btn-sm" onClick={onClose}>✕</button>
+          <h2><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign:'middle',marginRight:'0.4rem'}}><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z"/></svg>Outils Copilot</h2>
+          <button className="btn btn-ghost btn-sm" onClick={onClose} aria-label="Fermer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
 
         <div className="copilot-body">
@@ -132,7 +132,7 @@ export default function CopilotPanel({ config, messages, context, model, onClose
                     className="btn btn-ghost btn-sm"
                     onClick={() => setActiveTools(prev => ({ ...prev, [toolType]: false }))}
                   >
-                    ✕
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                   </button>
                 </div>
                 <div className="result-body">
@@ -171,7 +171,7 @@ function QuizRenderer({ data }) {
           </div>
           {answers[idx] !== undefined && (
             <div className={`quiz-feedback ${answers[idx] === q.correct ? 'correct' : 'incorrect'}`}>
-              {answers[idx] === q.correct ? '✅ Correct!' : `❌ Bonne réponse : ${q.options[q.correct]}`}
+              {answers[idx] === q.correct ? 'Correct !' : `Bonne reponse : ${q.options[q.correct]}`}
               {q.explanation && <p>{q.explanation}</p>}
             </div>
           )}
@@ -292,8 +292,8 @@ function VideoRenderer({ data }) {
   return (
     <div className="video-results">
       <div className="video-header-info">
-        <h4>🎥 Vidéos pour : <em>{data.concept}</em></h4>
-        {data.tips && <p className="video-tips">💡 {data.tips}</p>}
+        <h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign:'middle',marginRight:'0.3rem'}}><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>Videos pour : <em>{data.concept}</em></h4>
+        {data.tips && <p className="video-tips"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign:'middle',marginRight:'0.3rem'}}><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>{data.tips}</p>}
       </div>
 
       {data.videos && data.videos.length > 0 ? (
@@ -310,7 +310,7 @@ function VideoRenderer({ data }) {
                   {video.thumbnail ? (
                     <img src={video.thumbnail} alt={video.title} loading="lazy" />
                   ) : (
-                    <div className="video-thumb-placeholder">▶</div>
+                    <div className="video-thumb-placeholder"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="10 8 16 12 10 16 10 8"/></svg></div>
                   )}
                   {video.duration && (
                     <span className="video-duration">{video.duration}</span>
@@ -336,7 +336,7 @@ function VideoRenderer({ data }) {
 
       {data.queries && data.queries.length > 0 && (
         <div className="video-search-links">
-          <h5>🔍 Rechercher sur YouTube :</h5>
+          <h5><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign:'middle',marginRight:'0.3rem'}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Rechercher sur YouTube :</h5>
           {data.queries.map((q, idx) => {
             const query = typeof q === 'string' ? q : q.query
             const desc = typeof q === 'object' ? q.description : ''
@@ -360,7 +360,7 @@ function VideoRenderer({ data }) {
 
       {data.recommended_channels && data.recommended_channels.length > 0 && (
         <div className="video-recommended">
-          <h5>📺 Chaînes recommandées :</h5>
+          <h5><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{verticalAlign:'middle',marginRight:'0.3rem'}}><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>Chaines recommandees :</h5>
           <div className="channel-tags">
             {data.recommended_channels.map((ch, idx) => (
               <a
