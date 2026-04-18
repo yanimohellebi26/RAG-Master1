@@ -207,3 +207,84 @@ export function previewGDriveFile(fileId) {
 export function syncGDriveFolder(payload) {
   return post('/gdrive/sync', payload)
 }
+
+// ---------------------------------------------------------------------------
+// Gmail
+// ---------------------------------------------------------------------------
+
+export function fetchGmailStatus() {
+  return get('/gmail/status')
+}
+
+export function connectGmail() {
+  return post('/gmail/connect', {})
+}
+
+export function fetchGmailUnread({ filter = 'month', page = 1, pageSize = 20 } = {}) {
+  const params = new URLSearchParams()
+  params.set('filter', filter)
+  params.set('page', page)
+  params.set('page_size', pageSize)
+  return get(`/gmail/unread?${params.toString()}`)
+}
+
+export function setGmailEmailStatus(uid, status) {
+  return post('/gmail/email-status', { uid, status })
+}
+
+export function fetchGmailEmail(uid) {
+  return get(`/gmail/email/${encodeURIComponent(uid)}`)
+}
+
+export function summarizeGmailUnread(payload) {
+  return post('/gmail/summarize', payload || {})
+}
+
+export function draftGmailReply(payload) {
+  return post('/gmail/draft', payload)
+}
+
+export async function sendGmailEmail(payload) {
+  if (payload.attachments && payload.attachments.length > 0) {
+    const formData = new FormData()
+    formData.append('to', payload.to)
+    formData.append('subject', payload.subject)
+    formData.append('body', payload.body)
+    for (const file of payload.attachments) {
+      formData.append('attachments', file)
+    }
+    const res = await fetch(`${BASE}/gmail/send`, {
+      method: 'POST',
+      body: formData,
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: res.statusText }))
+      throw new Error(err.error || res.statusText)
+    }
+    return res.json()
+  }
+  return post('/gmail/send', payload)
+}
+
+export function fetchGmailCategories() {
+  return get('/gmail/categories')
+}
+
+export function classifyGmailAI() {
+  return post('/gmail/classify-ai', {})
+}
+
+export function categorizeGmailEmail(uid, category) {
+  return post('/gmail/categorize', { uid, category })
+}
+
+export async function uncategorizeGmailEmail(uid) {
+  const res = await fetch(`${BASE}/gmail/categorize/${encodeURIComponent(uid)}`, {
+    method: 'DELETE',
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }))
+    throw new Error(err.error || res.statusText)
+  }
+  return res.json()
+}

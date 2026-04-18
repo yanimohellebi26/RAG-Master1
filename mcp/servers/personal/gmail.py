@@ -2,6 +2,7 @@
 MCP Server -- Gmail / Email.
 
 Gestion des mails : lire, envoyer, trier, resumer, repondre.
+Utilise le GmailService (IMAP/SMTP + App Password) en interne.
 """
 
 from __future__ import annotations
@@ -38,12 +39,29 @@ class GmailServer(BaseMCPServer):
         ]
 
     async def connect(self) -> bool:
-        # TODO: OAuth2 authentication with Gmail API
-        self.logger.info("Gmail connection -- not yet implemented")
-        return False
+        """Connect via GmailService (IMAP App Password)."""
+        try:
+            from api.services.gmail import gmail_service
+            if not gmail_service.available:
+                self.logger.warning("Gmail credentials missing in .env")
+                return False
+            success = gmail_service.connect()
+            if success:
+                self._connected = True
+            return success
+        except Exception as exc:
+            self.logger.error("Gmail MCP connect failed: %s", exc)
+            return False
 
     async def disconnect(self) -> None:
-        pass
+        self._connected = False
 
     async def health(self) -> bool:
-        return self.is_connected
+        """Check connection by delegating to the service."""
+        if not self.is_connected:
+            return False
+        try:
+            from api.services.gmail import gmail_service
+            return gmail_service.connected
+        except Exception:
+            return False
