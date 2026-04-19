@@ -158,6 +158,23 @@ function IconCloud() {
   )
 }
 
+function IconEnvelope() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      style={{ flexShrink: 0 }}
+    >
+      <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2" fill="none" />
+      <path d="M2 6l10 7 10-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  )
+}
+
 /* ---------- Layout ---------- */
 
 export default function Layout() {
@@ -197,6 +214,10 @@ export default function Layout() {
             <NavLink to="/gdrive" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
               <IconCloud />
               Drive
+            </NavLink>
+            <NavLink to="/gmail" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              <IconEnvelope />
+              Gmail
             </NavLink>
           </nav>
           <h1 className="topbar-title">

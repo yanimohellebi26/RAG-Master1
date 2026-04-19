@@ -65,8 +65,7 @@ watch_mode:
 mcp:
   # Outils personnels (priorite haute)
   gmail:
-    enabled: false
-    # credentials_path: ./credentials/gmail.json
+    enabled: true
   terminal:
     enabled: false
     sandbox: true

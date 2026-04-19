@@ -15,6 +15,7 @@ import ChatPage from './pages/ChatPage'
 import EvaluationPage from './pages/EvaluationPage'
 import YouTubePage from './pages/YouTubePage'
 import GoogleDrivePage from './pages/GoogleDrivePage'
+import GmailPage from './pages/GmailPage'
 
 export default function AppRoutes() {
   return (
@@ -24,6 +25,7 @@ export default function AppRoutes() {
         <Route path="evaluation" element={<EvaluationPage />} />
         <Route path="youtube" element={<YouTubePage />} />
         <Route path="gdrive" element={<GoogleDrivePage />} />
+        <Route path="gmail" element={<GmailPage />} />
       </Route>
     </Routes>
   )

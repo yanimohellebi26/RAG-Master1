@@ -1,0 +1,685 @@
+{
+  "categories": {
+    "Scolarite": {
+      "color": "#8b5cf6",
+      "icon": "graduation"
+    },
+    "Travail": {
+      "color": "#0ea5e9",
+      "icon": "briefcase"
+    },
+    "Transports": {
+      "color": "#a855f7",
+      "icon": "train"
+    },
+    "Achats": {
+      "color": "#f97316",
+      "icon": "cart"
+    },
+    "Banque & Finance": {
+      "color": "#eab308",
+      "icon": "bank"
+    },
+    "Factures & Abonnements": {
+      "color": "#ec4899",
+      "icon": "receipt"
+    },
+    "Newsletters & Promos": {
+      "color": "#f43f5e",
+      "icon": "mail"
+    },
+    "Sante": {
+      "color": "#10b981",
+      "icon": "heart"
+    },
+    "Logement": {
+      "color": "#78716c",
+      "icon": "home"
+    },
+    "Administratif": {
+      "color": "#64748b",
+      "icon": "folder"
+    },
+    "Reseaux sociaux": {
+      "color": "#3b82f6",
+      "icon": "share"
+    },
+    "Personnel": {
+      "color": "#22c55e",
+      "icon": "user"
+    }
+  },
+  "rules": [
+    {
+      "category": "Scolarite",
+      "senders": [
+        "universite",
+        "u-bourgogne",
+        "ub-link",
+        "crous",
+        "ent",
+        "moodle",
+        "campus",
+        "etudiant",
+        "scolarite",
+        "cvec",
+        "messervices.etudiant",
+        "univ-",
+        "education.gouv",
+        "parcoursup",
+        "studea"
+      ],
+      "subjects": [
+        "cours",
+        "examen",
+        "partiel",
+        "note",
+        "emploi du temps",
+        "inscription",
+        "scolarite",
+        "diplome",
+        "ue",
+        "td",
+        "tp",
+        "licence",
+        "master",
+        "stage",
+        "soutenance",
+        "releve de notes",
+        "bourse",
+        "cvec",
+        "ent"
+      ]
+    },
+    {
+      "category": "Travail",
+      "senders": [
+        "siemens",
+        "teams",
+        "microsoft",
+        "outlook",
+        "sharepoint",
+        "workday",
+        "adp",
+        "paie",
+        "rh@",
+        "hr@",
+        "peoplesoft"
+      ],
+      "subjects": [
+        "reunion",
+        "meeting",
+        "teams",
+        "fiche de paie",
+        "bulletin",
+        "conge",
+        "absence",
+        "planning",
+        "mission",
+        "alternance",
+        "contrat",
+        "avenant",
+        "entretien",
+        "objectif"
+      ]
+    },
+    {
+      "category": "Transports",
+      "senders": [
+        "sncf",
+        "ouigo",
+        "trainline",
+        "blablacar",
+        "ratp",
+        "navigo",
+        "ile-de-france-mobilites",
+        "flixbus",
+        "eurostar",
+        "tgv",
+        "transdev",
+        "keolis",
+        "divia"
+      ],
+      "subjects": [
+        "billet",
+        "e-billet",
+        "trajet",
+        "voyage",
+        "reservation train",
+        "itineraire",
+        "trafic",
+        "perturbation",
+        "navigo",
+        "abonnement transport"
+      ]
+    },
+    {
+      "category": "Achats",
+      "senders": [
+        "amazon",
+        "fnac",
+        "cdiscount",
+        "aliexpress",
+        "ebay",
+        "vinted",
+        "leboncoin",
+        "etsy",
+        "wish",
+        "decathlon",
+        "zalando",
+        "asos",
+        "nike",
+        "adidas",
+        "myprotein",
+        "ldlc",
+        "darty",
+        "boulanger"
+      ],
+      "subjects": [
+        "commande",
+        "order",
+        "expedition",
+        "livraison",
+        "colis",
+        "tracking",
+        "shipped",
+        "confirme",
+        "retour",
+        "remboursement"
+      ]
+    },
+    {
+      "category": "Banque & Finance",
+      "senders": [
+        "banque",
+        "credit",
+        "boursorama",
+        "fortuneo",
+        "ing",
+        "sg",
+        "bnp",
+        "caisse-epargne",
+        "credit-agricole",
+        "lcl",
+        "hsbc",
+        "revolut",
+        "n26",
+        "paypal",
+        "lydia",
+        "sumeria"
+      ],
+      "subjects": [
+        "releve",
+        "virement",
+        "prelevement",
+        "solde",
+        "paiement",
+        "carte",
+        "operation",
+        "decouvert",
+        "epargne",
+        "alerte paiement"
+      ]
+    },
+    {
+      "category": "Factures & Abonnements",
+      "senders": [
+        "spotify",
+        "netflix",
+        "disney",
+        "prime video",
+        "deezer",
+        "free",
+        "orange",
+        "sfr",
+        "bouygues",
+        "edf",
+        "engie",
+        "veolia",
+        "canal+",
+        "ocs",
+        "apple"
+      ],
+      "subjects": [
+        "facture",
+        "invoice",
+        "echeance",
+        "abonnement",
+        "renouvellement",
+        "mensualite",
+        "votre facture",
+        "avis de prelevement"
+      ]
+    },
+    {
+      "category": "Newsletters & Promos",
+      "senders": [
+        "newsletter",
+        "news@",
+        "marketing",
+        "promo",
+        "offre",
+        "info@",
+        "hello@",
+        "noreply",
+        "no-reply",
+        "ne-pas-repondre",
+        "donotreply"
+      ],
+      "subjects": [
+        "newsletter",
+        "promo",
+        "offre",
+        "reduction",
+        "soldes",
+        "vente flash",
+        "black friday",
+        "code promo",
+        "decouvrez",
+        "nouveaute",
+        "exclusif",
+        "derniere chance"
+      ]
+    },
+    {
+      "category": "Sante",
+      "senders": [
+        "ameli",
+        "cpam",
+        "doctolib",
+        "mutuelle",
+        "harmonie",
+        "mgen",
+        "lmde",
+        "smerep",
+        "pharmacie",
+        "medecin"
+      ],
+      "subjects": [
+        "rendez-vous",
+        "consultation",
+        "ordonnance",
+        "remboursement sante",
+        "carte vitale",
+        "tiers payant",
+        "vaccination",
+        "resultat",
+        "analyse",
+        "prescription"
+      ]
+    },
+    {
+      "category": "Logement",
+      "senders": [
+        "caf",
+        "apl",
+        "loyer",
+        "bailleur",
+        "agence immobiliere",
+        "nexity",
+        "foncia",
+        "century21",
+        "seloger",
+        "leboncoin immobilier",
+        "edf",
+        "engie",
+        "veolia",
+        "assurance habitation"
+      ],
+      "subjects": [
+        "loyer",
+        "quittance",
+        "apl",
+        "aide au logement",
+        "bail",
+        "etat des lieux",
+        "charges",
+        "syndic",
+        "assurance habitation",
+        "energie",
+        "compteur"
+      ]
+    },
+    {
+      "category": "Administratif",
+      "senders": [
+        "gouv",
+        "impots",
+        "prefect",
+        "mairie",
+        "tresor",
+        "france-travail",
+        "pole-emploi",
+        "service-public",
+        "ants",
+        "cni",
+        "passeport"
+      ],
+      "subjects": [
+        "attestation",
+        "convocation",
+        "dossier",
+        "certificat",
+        "declaration",
+        "avis d'imposition",
+        "notification",
+        "demande",
+        "document officiel"
+      ]
+    },
+    {
+      "category": "Reseaux sociaux",
+      "senders": [
+        "facebook",
+        "instagram",
+        "twitter",
+        "x.com",
+        "linkedin",
+        "tiktok",
+        "snapchat",
+        "pinterest",
+        "reddit",
+        "discord",
+        "whatsapp",
+        "telegram",
+        "github",
+        "gitlab",
+        "stackoverflow"
+      ],
+      "subjects": []
+    }
+  ],
+  "statuses": {
+    "Nouveau": "#3b82f6",
+    "En cours": "#f59e0b",
+    "Traite": "#22c55e"
+  },
+  "emails": {
+    "21789": {
+      "category": "Travail",
+      "status": "Nouveau",
+      "from": "yanimohellebi@gmail.com",
+      "subject": "remind mails",
+      "preview": "Objet : Rappel pour l'envoi d'un email\n\nBonjour [Nom],\n\nPourriez-vous me rappeler d'envoyer un email à [destinataire] concernant [sujet] ? J'aimerais m'assurer que cela soit fait dans les meilleurs délais.\n\nMerci d'avance pour votre aide.\n\nCordialement,\n\n[Votre Nom]  \n[Votre Poste]  \n[Votre Société]",
+      "ai": true
+    },
+    "21788": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "Google <no-reply@accounts.google.com>",
+      "subject": "Alerte de sécurité",
+      "preview": "[image: Google]\r\nMot de passe d'appli créé pour vous connecter à votre compte\r\n\r\n\r\nyanimohellebi@gmail.com\r\nSi vous n'avez pas généré ce mot de passe pour RAG-M1, quelqu'un utilise\r\npeut-être votre compte. Vérifiez et sécurisez votre compte dès maintenant.\r\nConsulter l'activité\r\n<https://accounts.go"
+    },
+    "21786": {
+      "category": "Travail",
+      "status": "Nouveau",
+      "from": "no-reply.divia.fr@cykleo.fr",
+      "subject": "DiviaVélo - Arrivée à échéance de votre contrat",
+      "preview": "Bonjour M. YANI MOHELLEBI, \r\n\r\nNous vous informons que votre contrat pour le service DiviaVélo arrive à expiration le 03/03/2026. \r\n\r\nBien cordialement,\r\n\r\nLes équipes DiviaVélo"
+    },
+    "21780": {
+      "category": "Travail",
+      "status": "Nouveau",
+      "from": "contact@qualisens.eu",
+      "subject": "Qualisens - Proposition de mission",
+      "preview": "Bonjour,\r\n\r\n Mission : MINI 2026 vague n°1\r\n Point de vente : CAR AVENUE - Chenove\r\n Code postal : 21301 \r\n Ville : CHENOVE\r\n\r\n \r\n? QUOI ? \r\n\r\nVisite mystère dans une concession MINI sur RDV (prise de RDV sur internet\r\nà faire par vos soins, copies écran à enregistrer obligatoirement).\r\n\r\nAVANT DE"
+    },
+    "21776": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "\"Floa\" <no-reply@services.floa.com>",
+      "subject": "987014 est votre code",
+      "preview": "==============================\r\n\r\nVisualiser en ligne: http://t2.services.floa.com/r/?id=t1e6f634,85ee7f,1f31&e=cDE9JTQwcHgxM0ZydTJueTVXYVRreElzN0lhb29CTWZMb3FpSnVodzFZV0JHU1RpYyUzRA&s=Q6y_GpfaEeZ5H9R_QPPfpyZ6zxfrEvesyXvOJWgQtBk\r\n\r\n==============================\r\n\r\nNe communiquez jamais ce code."
+    },
+    "21775": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "Alertes LinkedIn Jobs <jobalerts-noreply@linkedin.com>",
+      "subject": "“Développeur” : Alan - Fullstack Software Engineer (x/f/m) - AI Customer Support et plus encore",
+      "preview": "Votre alerte Emploi pour Développeur (Dijon)\r\nDe nouvelles offres d’emploi correspondent à vos préférences.\r\nGérer les alertes : https://www.linkedin.com/comm/jobs/alerts?lipi=urn%3Ali%3Apage%3Aemail_email_job_alert_digest_01%3BhW7NZNR%2BRRWqe9xUBUXjSA%3D%3D&midToken=AQFTmzh_stIOAw&midSig=2jysiynN9u"
+    },
+    "21771": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "Équipe  des comptes Microsoft <account-security-noreply@accountprotection.microsoft.com>",
+      "subject": "Votre code  à  usage unique",
+      "preview": "Bonjour yanimohellebi@gmail.com,\r\n\r\nNous avons reçu votre demande de code à usage unique à utiliser avec votre compte Microsoft.\r\n\r\nVotre code à usage unique est : 554196\r\n\r\nCe code ne peut être saisi que sur un site web ou une application officielle. Ne le partagez avec personne. Nous ne vous le de"
+    },
+    "21770": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "essilorluxottica-jobnotification@noreply12.jobs2web.com",
+      "subject": "Nouvelles offres d'emploi publiées par careers.essilorluxottica.com",
+      "preview": "Vous recevez cet email parce que vous avez rejoint la communaut&#233; de talents EssilorLuxottica Group sur 04/04/2025. Vous recevrez ces messages tous les 7 jour(s).<br/><br/>\r\n\t<b>Vos crit&#232;res d'alerte (ALTERNANCE - Data Scientist H/F, Créteil FR) correspondent aux offres d'emploi suivantes s"
+    },
+    "21768": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "Substack <no-reply@substack.com>",
+      "subject": "\"Peanut-Chili Oil Noodles w/ Crispy Shredded Tofu 🔥\" and 4 more",
+      "preview": "<html style=\"scrollbar-width: thin;scrollbar-color: rgb(219,219,219)rgb(255,255,255);\"><head><meta charset=\"utf-8\"><title>\"Peanut-Chili Oil Noodles w/ Crispy Shredded Tofu &#128293;\" and 4 more</title><style>\r\n@media (max-width: 1024px) {\r\n  .typography .pullquote-align-left,\r\n  .typography.editor ."
+    },
+    "21766": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "Marc at Frontend Masters <marc@frontendmasters.com>",
+      "subject": "Modern Angular, taught by the people who build its ecosystem",
+      "preview": "Alex Okrushko from the NgRx core team takes you from intermediate to enterprise.\r\n\r\nHi yani,\r\n\r\nLast year we added Mark Techson from Google to the Angular learning path ( https://frontendmasters.com/learn/angular/?utm_source=email&utm_medium=newsletter&utm_campaign=angularcourses ) to give developer",
+      "ai": true
+    },
+    "21765": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "The Educative Team <support@educative.io>",
+      "subject": "Your AI roundup is here, Yani",
+      "preview": "See this week's Educative Newsletter + our updated OpenAI course ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏",
+      "ai": true
+    },
+    "21756": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "Hellowork Actus <newsletter@emails.hellowork.com>",
+      "subject": "Ces 5 erreurs vous font (peut-être) manquer des appels de recruteurs !",
+      "preview": "<!doctype html><html xmlns=\"http://www.w3.org/1999/xhtml\"><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"format-detection\" content=\"telephone=no\"><meta name=\"format-detection\" content=\"date="
+    },
+    "21754": {
+      "category": "Transports",
+      "status": "Nouveau",
+      "from": "SNCF Connect <noreply@connect.sncf>",
+      "subject": "Votre voyage Mâcon (toutes Gares) - Dijon (toutes Gares), aller le lundi 23 février 2026",
+      "preview": "SNCF CONNECT\r\n\r\nMERCI ET BON VOYAGE\r\n\r\nPour récupérer votre billet, avoir plus de détails sur votre réservation, la compléter, la modifier ou l’annuler, rendez-vous sur votre espace Mon Voyage https://www.sncf-connect.com/redirect?pnrRef=PHWHTQ&name=MOHELLEBI&rfrr=VscMailConf_Travel_AftersaleWeb&red"
+    },
+    "21753": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "SNCF Connect <noreply@connect.sncf>",
+      "subject": "Echec de paiement",
+      "preview": "SNCF CONNECT\r\ninstructionLine\r\n\r\nBonjour Yani MOHELLEBI,\r\n\r\nUn incident technique a empêché la validation de votre paiement du 23 févr. 2026, 12:02 pour un montant total de 5,80 €.\r\ninstructionLine\r\n\r\nVérifiez votre relevé de compte dans les prochains jours.\r\nSi vous constatez un débit injustifié, c"
+    },
+    "21752": {
+      "category": "Transports",
+      "status": "Nouveau",
+      "from": "Mes billets TER <mesbilletsTER-noreply@ter-sncf.fr>",
+      "subject": "Confirmation de votre commande de billets TER - mail à conserver",
+      "preview": "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"fr\" xml:lang=\"fr\" style=\"font-family: Arial, sans-serif; color:#0c0c0c; background-color:#ECF0F1\">\r\n\r\n<head>\r\n    <meta http-e"
+    },
+    "21751": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "Mon Identifiant SNCF <no-reply@monidentifiant.sncf>",
+      "subject": "Code de vérification",
+      "preview": "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html style=\"background:#FFFFFF;padding:40px\" dir=\"ltr\" lang=\"en\"><head><link rel=\"preload\" as=\"image\" href=\"https://www.monidentifiant.sncf/assets/images/alert-info-icon.png\"/><l"
+    },
+    "21748": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "Alertes LinkedIn Jobs <jobalerts-noreply@linkedin.com>",
+      "subject": "“null” : Maki People - AI Engineer et plus encore",
+      "preview": "Votre alerte Emploi pour null (Paris)\r\nDe nouvelles offres d’emploi correspondent à vos préférences.\r\nGérer les alertes : https://www.linkedin.com/comm/jobs/alerts?lipi=urn%3Ali%3Apage%3Aemail_email_job_alert_digest_01%3BXDsvNQWZSw6JtcSfraW9sg%3D%3D&midToken=AQFTmzh_stIOAw&midSig=2QiLrRVSS-Cs81&trk="
+    },
+    "21741": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "Spotify <no-reply@spotify.com>",
+      "subject": "Profitez de votre musique ensemble avec un Jam et un mois  gratuit de Premium",
+      "preview": "Passez à Spotify Premium. https://www.spotify.com/purchase/offer/default-intro\r\nAnimez un Jam avec 1 mois gratuit de Premium\r\n\r\n\r\nProfitez d'un mois gratuit de Premium et écoutez à l'unisson avec vos contacts en animant un Jam. Vos contacts et vous-même pouvez ajouter vos titres préférés à une file"
+    },
+    "21737": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "\"UGC\" <info@contact.ugc.fr>",
+      "subject": "Votre avis est précieux",
+      "preview": "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"><html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" lang=\"und\"><head><!--[if !mso]><!--><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edg"
+    },
+    "21736": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "Alertes LinkedIn Jobs <jobalerts-noreply@linkedin.com>",
+      "subject": "“machine learning” : STMicroelectronics France - STAGE - AI assistant development F/H et plus encore",
+      "preview": "Votre alerte Emploi pour machine learning (France)\r\nDe nouvelles offres d’emploi correspondent à vos préférences.\r\n          \r\nSTAGE - AI assistant development F/H\r\nSTMicroelectronics France\r\nGrenoble\r\n\r\n4 anciens élèves\r\nVoir l’offre d’emploi : https://www.linkedin.com/comm/jobs/view/4376300399/?tr"
+    },
+    "21733": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "Alertes LinkedIn Jobs <jobalerts-noreply@linkedin.com>",
+      "subject": "“null” : OpenAI - AI Deployment Engineer et plus encore",
+      "preview": "Votre alerte Emploi pour null (Paris)\r\nDe nouvelles offres d’emploi correspondent à vos préférences.\r\n          \r\nAI Deployment Engineer\r\nOpenAI\r\nParis\r\nCroissance rapide\r\nVoir l’offre d’emploi : https://www.linkedin.com/comm/jobs/view/4373735379/?trackingId=UyutCDf%2FXAVvt7kvo7SkcA%3D%3D&refId=rPaU"
+    },
+    "21730": {
+      "category": "Banque & Finance",
+      "status": "Nouveau",
+      "from": "\"Oracle University Learning Community (NO-REPLY)\"\r\n\t<ou.oracle@vanillaforums.email>",
+      "subject": "[Oracle University Learning Community] Weekly Digest: Oracle\r\n University Learning Community",
+      "preview": "Weekly Digest: Oracle University Learning Community\r\nWe send this update every week to help you stay on top of the conversations happening in the groups you follow. Since things move fast, it’s your shortcut to the most helpful posts and updates from the last seven days.\r\n\r\nUse this summary to stay"
+    },
+    "21727": {
+      "category": "Administratif",
+      "status": "Nouveau",
+      "from": "\"Facebook\" <notification@priority.facebookmail.com>",
+      "subject": "Mises à jour pour vous : 11 nouvelles notifications",
+      "preview": "========================================\r\nVoir vos notifications.\r\nhttps://www.facebook.com/nd/?notifications%2F&aref=1771699960513957&medium=email&mid=64b59c13582d3G5af6e0a85e11G64b5a0acb85a5G32b&bcode=2.1771699962.Ab2OuFOxsSwdw9o94zdcI-uyFjg&n_m=yanimohellebi%40gmail.com&n_sg=Q6bPBAIdzDjaNws40ZDPt"
+    },
+    "21724": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "The Substack Post <post+the-weekender@substack.com>",
+      "subject": "“Conspiracy theories are the true Great American Art Form”",
+      "preview": "View this post on the web at https://post.substack.com/p/conspiracy-theories-are-the-true\r\n\r\nThis week, we’re rating conspiracy theories, getting stuck in 16th-century traffic, and exploring the AI enthusiasm gap between China and the U.S.\r\nTHE DISCOURSE\r\nBriefly noted\r\nIn Pursuit brings former U.S."
+    },
+    "21723": {
+      "category": "Reseaux sociaux",
+      "status": "Nouveau",
+      "from": "\"Curtis Coatman\" <linkedin@em.linkedin.com>",
+      "subject": "Bonjour, je suis Curtis Coatman de l'équipe LinkedIn Premium",
+      "preview": "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n<html lang=\"en\" style=\"width: 100%;\" xml:lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:v=\"urn:schemas-microsoft-com:vml\">\r\n<head>"
+    },
+    "21720": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "Meetup <info@email.meetup.com>",
+      "subject": "Mise  à  jour importante: International and Hangout Exchange  ⚠️",
+      "preview": ".hero-title { margin: 0 30px !important; margin-top: 20px\r\n!important; } .hero-desc { margin: 0 15px !important; }\r\n.img-logo { width: 120px !important; } .bg-mobile {\r\nbackground-color: #F7F7F8 !important; } .layout-body-content {\r\npadding-left: 60px !impor"
+    },
+    "21719": {
+      "category": "Administratif",
+      "status": "Nouveau",
+      "from": "'Secrétariat - FEBIA' via BTC CFVU  <cfvu@btc.febia-bourgogne.fr>",
+      "subject": "[FEBIA] Convocation AGO 04/03/2026",
+      "preview": "Bonjour,\r\n\r\nJ'ai le plaisir de vous convier à la prochaine Assemblée Générale Ordinaire\r\nde la FEBIA qui aura lieu le *mercredi 04 mars 2026 à 18h* à la *maison de\r\nl'étudiant*.\r\n\r\nVous trouverez la convocation en pièce jointe, et les documents\r\npréparatoires vous seront envoyés prochainement.\r\n\r\nMe"
+    },
+    "21716": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "Zach at Educative <zach.m@educative.io>",
+      "subject": "If you're a Java dev, you're gonna want to read this",
+      "preview": "The 2026 Java stack just added a whole new set of layers.\r\n\r\nView in browser (https://learn.educative.io/e3t/Ctc/RG+113/cz5H404/VWwncQ8lkV0_W1R1_dC8G5H8DW6YVQGc5KPgPdN8GDX6z5m_5PW7lCGcx6lZ3ksW6pD2Gn95NPQRW73ymqt6Md8-pW34tpHk1YhDBzW1y-Lrs6kZjbqW5pZDL76yt5QHW2wsbtj1LGgXjW8McPXY14PSL7W8qTR324l914WW3FMB",
+      "ai": true
+    },
+    "21715": {
+      "category": "Newsletters & Promos",
+      "status": "Nouveau",
+      "from": "Alexander Erdl <noreply@neo4j.com>",
+      "subject": "This Week in Neo4j: NODES AI, Context, Text2Cypher, Fraud Detection\r\n and more",
+      "preview": "<https://message.neo4j.com/NzEwLVJSQy0zMzUAAAGgHjCVsT9fPGF-v3oQyePzIzlTKtEKroMA-SBGuFF69scS6AoHsfi5qJ5hElwYHlz_b_BC9bA=>\r\nNeo4j Developer News\r\nView it in Your Browser <https://message.neo4j.com/dc/tkdL1LgnFRJjCDlqRdJWrhIKfWh-At2aJYy191DQOeQeudsGvo0eeMciAl5Pxw_fVZVJlpYjXelDKihxbRwcAjxne1yGgyygGoU78d"
+    },
+    "21709": {
+      "category": "Banque & Finance",
+      "status": "Nouveau",
+      "from": "reservation@ugcmailing.fr",
+      "subject": "Réservation UGC : 20/02/2026 21:05 HAMNET",
+      "preview": "<!doctype html>\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\r\n\r\n<head>\r\n  <title>\r\n  </title>\r\n  <!--[if !mso]><!-->\r\n  <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\r\n  <!--<![endif]-->\r\n  <meta http-eq"
+    },
+    "21708": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "\"The Batch @ DeepLearning.AI\" <thebatch@deeplearning.ai>",
+      "subject": "The New Open-Weights Leader, Big AI’s Political Influence, Predicting Illness, Faster Reasoning",
+      "preview": "Will AI create new job opportunities? My daughter Nova loves cats, and her favorite color is yellow. ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏  ͏"
+    },
+    "21707": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "do_not_reply@payzen.eu",
+      "subject": "Boutique Meyclub - Votre paiement pour la commande Réf. 69951156",
+      "preview": "﻿           \t\t\r\n\r\n\t     \t\t    \t  Notification par e-mail   \r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\t     \t\t     \t  BOUTIQUE:Boutique Meyclub \r\n Adresse URL:http://www.meyclub.com\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\t     \t\t     \t Bonjour Mme/Mlle/M. YANI MOHELLEBI,  Cet e-mail confirme que nous venons d'enregistrer votre demande"
+    },
+    "21706": {
+      "category": "Achats",
+      "status": "Nouveau",
+      "from": "\" Votre boutique Edenred Meyclub/Kadéos \" <votre-commande@commandes-edenred-meyclub.kadeos.com>",
+      "subject": "Meyclub : confirmation de votre commande de \"UGC Lyon - E-Bill...\"",
+      "preview": "<!DOCTYPE html>\n<html>\n<head>\n<title></title>\n</head>\n<body>\n<table align=\"center\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"border-collapse:collapse; background-color: f2f2f2;\">\n<tr>\n<td>\n<table align=\"center\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"backgr"
+    },
+    "21698": {
+      "category": "Reseaux sociaux",
+      "status": "Nouveau",
+      "from": "Luma <support@luma.com>",
+      "subject": "722523 is your Luma sign-in code",
+      "preview": "722523\r\nis your Luma sign-in code.\r\nIf you didn’t attempt to sign in, you can safely ignore this email.\r\n\r\nSent using https://luma.com",
+      "ai": true
+    },
+    "21693": {
+      "category": "Banque & Finance",
+      "status": "Nouveau",
+      "from": "Votre CAF <nepasrepondre@emailing.caf.fr>",
+      "subject": "Votre code de vérification de connexion",
+      "preview": "Votre messagerie ne permet pas d'afficher le courriel que vous a transmis votre CAF. \r\nVeuillez consulter votre espace sécurisé \"Mon Compte\" sur www.caf.fr"
+    },
+    "21684": {
+      "category": "Administratif",
+      "status": "Nouveau",
+      "from": "ON AIR Lyon Jean-Macé <lead+9844848@app.masalledesport.com>",
+      "subject": "Vigilance anti-phishing",
+      "preview": "<!doctype html>\r\n<html lang=\"und\" dir=\"auto\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\r\n  <head>\r\n    <title>{subject}</title>\r\n    <!--[if !mso]><!-->\r\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">",
+      "ai": true
+    },
+    "21677": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "Le Wagon Lyon | Formations Tech & IA <info@email.meetup.com>",
+      "subject": "📅 Programmé à  l'instant:  Reconversion Tech : risques  cachés et vraies opportunités",
+      "preview": ""
+    },
+    "21673": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "Votre paiement en 4 fois <info-floa-4x@mail.floa.fr>",
+      "subject": "Votre  4ème mensualité",
+      "preview": "Vous ne voyez pas l'email ? Cliquez \r\nici\r\nhttps://tr.mail.floa.fr/hit/ASP2/08F/gz/ei1bkbOZvU9ZrtrTXJm0q59jh_rQsObTfFrnNMPqpgsgl2FHIAJnOf50yHs3a7WytzYaJZsT6xR1k9ODLfY8_EJ_IlwgfwG0IBBSW7wp5Nd_CaQHjLzHZKLsIjdBs8mE8RbglmzUoL-TfHoiTbBZDTjNwxbsWPaF5edk7fICYR_bN-5vkNAdrCqT6pscyKfenG3NouGgzEf"
+    },
+    "21670": {
+      "category": "Scolarite",
+      "status": "Nouveau",
+      "from": "Welcome to the Jungle <newsletter@welcometothejungle.com>",
+      "subject": "La boule au ventre le dimanche soir ? On a la solution👇",
+      "preview": "**Faites plus confiance à vos émotions**\r\n========================================\r\n\r\n \r\n\r\nVous allez au travail avec la boule au ventre ? Non, ce n'est pas normal. C'est un signal fort que vous envoie votre corps et qu'il faut écouter. Seulement parfois, on ne se sent pas prêt·e à creuser la piste"
+    },
+    "21669": {
+      "category": "Banque & Finance",
+      "status": "Nouveau",
+      "from": "LinkedIn <billing-noreply@linkedin.com>",
+      "subject": "Merci d’avoir acheté Premium Career",
+      "preview": "Yani, votre achat est confirmé\r\nMerci d’avoir acheté Premium Career ! Votre abonnement est désormais activé et vous trouverez votre reçu en pièce jointe.\r\n        Accéder à Premium: https://www.linkedin.com/comm/premium/my-premium/?lipi=urn%3Ali%3Apage%3Aemail_email_lbep_initial_purchase_01%3BJ3BayQ"
+    }
+  }
+}
