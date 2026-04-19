@@ -1,32 +1,29 @@
-# RAG Master 1
+# RAG Master 1 — Assistant Pédagogique IA
 
-Assistant pedagogique base sur RAG pour repondre aux questions sur les
-cours du Master 1 Informatique -- Universite de Bourgogne.
+Assistant conversationnel basé sur **RAG (Retrieval-Augmented Generation)** pour répondre aux questions sur les cours du **Master 1 Informatique** — Université de Bourgogne.
 
-## Fonctionnalites
+## Fonctionnalités
 
 ### RAG Principal (OpenAI)
-- **Chat conversationnel** avec historique de session securise
-- **Filtrage par matiere** pour cibler les recherches
-- **Pipeline avance** : query rewriting, hybrid search (BM25 + semantic), re-ranking
-- **Sources affichees** avec tracabilite complete
-- **Evaluation automatique** avec metriques detaillees
+- **Chat conversationnel** avec historique de session sécurisé
+- **Filtrage par matière** pour cibler les recherches
+- **Pipeline avancé** : query rewriting, hybrid search (BM25 + sémantique), re-ranking
+- **Sources affichées** avec traçabilité complète
+- **Évaluation automatique** avec métriques détaillées
 
-### Copilot Tools (GitHub Copilot SDK)
-Panneau d'outils complementaires pour enrichir visuellement les reponses :
-- **Quiz** -- Generation de QCM interactifs
-- **Tableau** -- Tableaux recapitulatifs / comparatifs
-- **Graphique** -- Visualisation en barres, lignes, aires
-- **Concepts cles** -- Extraction avec niveaux d'importance
-- **Flashcards** -- Cartes de revision recto-verso
-- **Mind Map** -- Carte mentale structuree
+### Copilot Tools
+- **Quiz** — Generation de QCM interactifs
+- **Tableau** — Tableaux récapitulatifs / comparatifs
+- **Graphique** — Visualisation en barres, lignes, aires
+- **Concepts clés** — Extraction avec niveaux d'importance
+- **Flashcards** — Cartes de révision recto-verso
+- **Mind Map** — Carte mentale structurée
 
-### Serveurs MCP
-Integration de serveurs MCP (Model Context Protocol) pour etendre les capacites :
-- **YouTube Transcript** -- Indexation de cours video YouTube
-- **Gmail, Google Drive, Notion** -- Acquisition de contenu (prevu)
-- **Brave Search, Arxiv, Wikipedia** -- Recherche externe (prevu)
-- Voir `docs/MCP_INTEGRATION.md` pour la roadmap complete
+### Serveurs MCP intégrés
+- **YouTube Transcript** — Indexation de cours vidéo
+- **Brave Search, Arxiv, Wikipedia** — Recherche externe
+- **Gmail, Google Drive, Notion** — Acquisition de contenu
+
 
 ## Architecture
 
